@@ -1,0 +1,10 @@
+.portfolio-view-wrapper {
+  display: flex;
+  .profile-container {
+    min-width: 60px;
+    width: 350px;
+  }
+  .blogs-container {
+    display: flex;
+  }
+}

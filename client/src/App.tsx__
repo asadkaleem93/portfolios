@@ -1,0 +1,44 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const App = () => {
+  const [returnData, setReturnData] = useState('');
+  useEffect(() => {
+    const body = {
+      query: `query {
+          portfolios {
+            author_name
+          } 
+        }`
+    };
+    const options = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios
+      .post(
+        'http://localhost:3001/',
+        {
+          query: `query {
+        portfolios {
+          email,
+          password
+        } 
+      }`
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then((res: any) => {
+        console.log('-->', res);
+      });
+  }, []);
+
+  return <div>From frontEnd: </div>;
+};
+
+export default App;

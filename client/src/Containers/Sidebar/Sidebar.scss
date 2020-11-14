@@ -1,0 +1,10 @@
+@import "../../Assets//Scss/Constants.scss";
+
+.portfoliosSideBar {
+  width: 15%;
+  border: 1px solid $appColor;
+  padding: $appPadding;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}

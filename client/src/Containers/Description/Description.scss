@@ -1,0 +1,10 @@
+@import "../../Assets//Scss/Constants.scss";
+
+.portfoliosDescription {
+  height: 25vh;
+  border: 1px solid $appColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $appPadding;
+}

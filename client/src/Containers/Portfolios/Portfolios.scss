@@ -1,0 +1,11 @@
+@import "../../Assets/Scss/Constants.scss";
+
+.portfoliosContainer {
+  display: flex;
+  flex-direction: column;
+
+  .portfoliosDetail {
+    display: flex;
+    height: 75vh;
+  }
+}

@@ -1,0 +1,14 @@
+@import '../../../../Assets/Scss/Required.scss';
+
+.create-blog-portfolio-wrapper {
+  padding: $appPadding;
+  .create-blog-form-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+
+    .create-blog-single-form {
+      border: solid 1px grey;
+    }
+  }
+}
