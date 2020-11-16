@@ -2,10 +2,10 @@
 import axios from "axios";
 
 // src
-// import { blogsFormInputsType } from "../Components/Portfolios/Bloggers/CreatePortfolio/Types";
+import { blogsFormInputsType } from "../Components/Portfolios/Bloggers/CreatePortfolio/Types";
 
 const url = "http://localhost:3001/";
-export const createBlogger = (values: any): Promise<any> => {
+export const createBlogger = (values: blogsFormInputsType): Promise<any> => {
   const query = `mutation createblogger($input: createBloggersInput!) {
     createblogger(input: $input) {
       message

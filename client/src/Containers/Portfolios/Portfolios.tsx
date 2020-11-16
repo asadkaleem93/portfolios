@@ -8,7 +8,6 @@ import "./Portfolios.scss";
 
 export const Portfolios = () => {
   const { portfolioId = "" } = useParams<{ portfolioId?: string }>();
-  console.log("-->", portfolioId);
   return (
     <div className="portfoliosContainer">
       <Description />

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PortfolioCard } from "../../Components/PortfolioCard/PortfolioCard";
-import { PortfoliosContentHeader } from "../../Components/PortfoliosContentHeader/PortfoliosContentHeader";
+import { PortfoliosContentHeader } from "../PortfoliosContentHeader/PortfoliosContentHeader";
 
 import "./PortfoliosContent.scss";
 
@@ -92,7 +92,6 @@ export const PortfoliosContent = () => {
   const { searchedString } = state;
 
   const onCardSearch = (string: string) => {
-    console.log("string -->", string);
     setState({
       ...state,
       searchedString: string,

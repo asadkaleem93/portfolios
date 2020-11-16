@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 //src
 import Header from "./Header";
 import Footer from "./Footer/Index";
-import CreatePortfolios from "./Portfolios/Bloggers/CreatePortfolio/Index";
-import ViewPortfolio from "./Portfolios/Bloggers/ViewPortfolio/Index";
 import { Portfolios } from "../Containers/Portfolios/Portfolios";
 // import './index.css';
 
@@ -27,16 +25,6 @@ const App = () => {
         <div className="portfolios-wrapper">
           {/* <Header /> */}
           <div className="mainContent">
-            <Route
-              exact={true}
-              path="/blogs/create"
-              component={CreatePortfolios}
-            />
-            <Route
-              exact={true}
-              path="/portfolio/:id"
-              component={ViewPortfolio}
-            />
             <Route exact={true} path="/:portfolioId" component={Portfolios} />
           </div>
           {/* <Footer /> */}
