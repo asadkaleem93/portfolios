@@ -26,17 +26,7 @@ export const PortfolioCard = (props: PortfolioCardType) => {
       <Meta
         title={title}
         description={
-          <Paragraph ellipsis={{ rows: 5 }}>
-            Ant Design, a design language for background applications, is
-            refined by Ant UED Team. Ant Design, a design language for
-            background applications, is refined by Ant UED Team. Ant Design, a
-            design language for background applications, is refined by Ant UED
-            Team. Ant Design, a design language for background applications, is
-            refined by Ant UED Team. Ant Design, a design language for
-            background applications, is refined by Ant UED Team. Ant Design, a
-            design language for background applications, is refined by Ant UED
-            Team.
-          </Paragraph>
+          <Paragraph ellipsis={{ rows: 5 }}>{description}</Paragraph>
         }
       />
     </Card>

@@ -1,14 +1,14 @@
 // lib
 const pgp = require('pg-promise')({});
 
-const cn = {
+const connection = {
   host: 'localhost', // server name or IP address;
   port: 5432,
   database: 'portfolios',
-  user: 'asad',
+  user: 'macbook',
   password: '626883'
 };
 
-const dbConnection = pgp(cn);
+const dbConnection = pgp(connection);
 
 module.exports = dbConnection;

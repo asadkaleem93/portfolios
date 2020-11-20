@@ -1,13 +1,10 @@
 // lib
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-// import Layout from 'antd/lib/layout';
 
-//src
-import Header from "./Header";
-import Footer from "./Footer/Index";
 import { Portfolios } from "../Containers/Portfolios/Portfolios";
-// import './index.css';
+import { SignIn } from "../Containers/SignIn/SignIn";
+import { AppContextProvider } from "./Contexts/AppContext";
 
 // constants
 // const { Content } = Layout;
@@ -22,13 +19,16 @@ const App = () => {
   return (
     <Router>
       <React.Fragment>
-        <div className="portfolios-wrapper">
-          {/* <Header /> */}
-          <div className="mainContent">
-            <Route exact={true} path="/:portfolioId" component={Portfolios} />
+        <AppContextProvider>
+          <div className="portfolios-wrapper">
+            {/* <Header /> */}
+            <div className="mainContent">
+              <Route exact={true} path="/" component={SignIn} />
+              <Route exact={true} path="/:portfolioId" component={Portfolios} />
+            </div>
+            {/* <Footer /> */}
           </div>
-          {/* <Footer /> */}
-        </div>
+        </AppContextProvider>
       </React.Fragment>
     </Router>
   );

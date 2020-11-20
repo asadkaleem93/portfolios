@@ -1,91 +1,14 @@
 import * as React from "react";
+import { useAppContext } from "../../Components/Contexts/AppContext";
 import { PortfolioCard } from "../../Components/PortfolioCard/PortfolioCard";
+import { PortfolioCardType } from "../../Utils/Types";
 import { PortfoliosContentHeader } from "../PortfoliosContentHeader/PortfoliosContentHeader";
 
 import "./PortfoliosContent.scss";
 
-type CardType = {
-  title: string;
-  description: string;
-  link: string;
-};
-
-const cards: Array<CardType> = [
-  {
-    title: "Card 1",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 2",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 3",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 5",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 6",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 7",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 8",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 9",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 10",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 11",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 12",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-  {
-    title: "Card 13",
-    description:
-      "This is a clickable First card description, Loream ipsum Loream ipsum Loream ipsum  Loream ipsum vLoream ipsum",
-    link: "https://google.com",
-  },
-];
-
 export const PortfoliosContent = () => {
+  const { state: appState } = useAppContext();
+  const { portfolioCards } = appState;
   const [state, setState] = React.useState({
     searchedString: "",
   });
@@ -98,8 +21,8 @@ export const PortfoliosContent = () => {
     });
   };
 
-  const updatedCards = cards.filter((card: CardType) =>
-    card.title.includes(searchedString),
+  const updatedCards = portfolioCards.filter((card: PortfolioCardType) =>
+    card.name.includes(searchedString),
   );
 
   return (
@@ -108,9 +31,10 @@ export const PortfoliosContent = () => {
         <PortfoliosContentHeader onCardSearch={onCardSearch} />
       </div>
       <div className="cards">
-        {updatedCards.map((card: CardType) => (
-          <a href={card.link} target="_blank">
-            <PortfolioCard title={card.title} description={card.description} />
+        {updatedCards.map((card: PortfolioCardType) => (
+          // ADD LINK CHECK
+          <a href={card.url} target="_blank">
+            <PortfolioCard title={card.name} description={card.description} />
           </a>
         ))}
       </div>

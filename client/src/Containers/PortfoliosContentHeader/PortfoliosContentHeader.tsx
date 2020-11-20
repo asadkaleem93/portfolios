@@ -62,7 +62,6 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
           dirty,
           isValid,
         }: FormikProps<FormFieldsType>) => {
-          console.log("Values -->", values);
           return (
             <Modal
               title="Add Card"

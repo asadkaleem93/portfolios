@@ -1,9 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './Components/Index';
-// import * as serviceWorker from './serviceWorker';
-import 'antd/dist/antd.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./Components/Index";
+import "antd/dist/antd.css";
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
-// serviceWorker.unregister();
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root"),
+);
