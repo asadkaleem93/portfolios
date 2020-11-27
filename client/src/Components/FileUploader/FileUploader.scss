@@ -1,0 +1,30 @@
+@import "../../Assets/Scss/Required.scss";
+
+.fileUploaderContainer {
+  input[type="file"] {
+    display: none;
+  }
+  .custom-file-upload {
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+
+    .attach-text {
+      height: 1.7rem;
+      padding: 0 1rem;
+      font-size: 0.8rem;
+      color: white;
+      background-color: $appColor;
+      border-color: $appColor;
+      box-shadow: 0 6px 12px -6px rgba(17, 100, 155, 0.5);
+      border-radius: 0.3rem;
+      margin-right: 1rem;
+      > span {
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+    }
+  }
+}

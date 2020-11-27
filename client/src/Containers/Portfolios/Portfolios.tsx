@@ -29,17 +29,18 @@ export const Portfolios = () => {
         userName: portfolioId,
         dispatch: dispatcher,
       }).then((res) => {
-        if (res === "Cards received")
-          setState({
-            ...state,
-            isLoading: false,
-          });
-        else
-          setState({
-            ...state,
-            error: res,
-            isLoading: false,
-          });
+        console.log("INNER res", res);
+        // if (res === "Cards received")
+        //   setState({
+        //     ...state,
+        //     isLoading: false,
+        //   });
+        // else
+        //   setState({
+        //     ...state,
+        //     error: res,
+        //     isLoading: false,
+        //   });
       });
     }
   }, [portfolioId]);

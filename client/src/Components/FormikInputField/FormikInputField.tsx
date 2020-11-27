@@ -1,5 +1,6 @@
 import * as React from "react";
-import Input, { InputProps } from "antd/es/input/Input";
+import { InputProps } from "antd/es/input/Input";
+import { Tooltip, Input } from "antd/es";
 import { useField } from "formik";
 
 import "./FormikInputField.scss";
@@ -10,11 +11,23 @@ type InputFieldType = {
 } & InputProps;
 
 export const FormikInputField = (props: InputFieldType) => {
-  const { placeHolder, name } = props;
-  const [field] = useField(name);
+  const { name } = props;
+  const [field, meta] = useField(name);
+  const invalid = Boolean(meta.error && meta.touched);
   return (
-    <div className="formikInputField">
-      <Input {...field} placeholder={placeHolder} />
-    </div>
+    <Tooltip
+      placement="right"
+      title={`${invalid ? meta.error : ""}`}
+      overlayClassName={[invalid ? "error-tooltip" : ""].join(" ")}
+      transitionName=""
+    >
+      <div className="formikInputField">
+        <Input
+          {...field}
+          {...props}
+          className={invalid ? `invalid ${props.className}` : props.className}
+        />
+      </div>
+    </Tooltip>
   );
 };

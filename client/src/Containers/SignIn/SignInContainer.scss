@@ -1,0 +1,44 @@
+@import "../../Assets/Scss/Required.scss";
+
+.signInContainer {
+  display: flex;
+  .sideImg {
+    width: 50%;
+  }
+  .signInForm {
+    width: 50%;
+    padding: $appPadding;
+    .sectionConatinaer {
+      padding: $appPadding;
+      border: 0.05rem solid $appColor;
+      box-shadow: 0 0px 13px 2px rgba(17, 100, 155, 0.2);
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+      .fieldRow {
+        display: flex;
+        justify-content: space-between;
+        .formikInputField {
+          width: 47%;
+        }
+        .radioGroup {
+          display: flex;
+          justify-content: flex-start;
+          width: 47%;
+          align-items: center;
+          margin-bottom: 0.8rem;
+          .label {
+            margin-right: 1.2rem;
+            font-weight: 600;
+            color: $appColor;
+          }
+        }
+        .fileUploader {
+          width: 47%;
+          height: 2rem;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}

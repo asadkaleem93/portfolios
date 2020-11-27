@@ -1,0 +1,9 @@
+@import "../../Assets/Scss/Required.scss";
+
+.appHeading {
+  font-size: $headingFont;
+  color: $appColor;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 700;
+}

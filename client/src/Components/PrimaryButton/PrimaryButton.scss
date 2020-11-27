@@ -1,0 +1,13 @@
+@import "../../Assets/Scss/Required.scss";
+
+.ant-btn {
+  &.ant-btn,
+  &:hover,
+  &:focus,
+  &:active {
+    color: white !important;
+    background-color: $appColor !important;
+    border-color: $appColor !important;
+    box-shadow: 0 6px 12px -6px rgba(17, 100, 155, 0.5) !important;
+  }
+}

@@ -1,0 +1,12 @@
+1- initdb /usr/local/var/portfolios (Create db)
+2- pg_ctl -D /usr/local/var/portfolios start (start db services)
+3- pg_ctl -D /usr/local/var/postgres stop (stop db services)
+
+
+Brew services list (to check list of services started)
+Brew services stop <service name> (stop service)
+
+Commands for using portfolios:
+1- psql portfolios (get into portfolio db)
+2- \d (list tables)
+3- \d <table-name> (schema of table)

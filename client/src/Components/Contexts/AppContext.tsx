@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import { PortfolioCardType } from "../../Utils/Types";
+import { PortfolioCardType, UserFieldsType } from "../../Utils/Types";
 
 export const SET_PORTFOLIO_CARDS = "SET_PORTFOLIO_CARDS";
+export const SET_USER_INFO = "SET_USER_INFO";
 
-type AppStateType = ({} & PortfolioCardType) | any;
+type AppStateType = ({} & PortfolioCardType & UserFieldsType) | any;
 
 type AppContextType = {
   state: AppStateType;
@@ -13,11 +14,14 @@ type AppContextType = {
 
 const defaultAppState: AppStateType = {
   portfolioCards: [],
+  userInfo: {},
 };
 
 const appContextReducer = (state, action) => {
   switch (action.type) {
     case SET_PORTFOLIO_CARDS:
+      return { ...state, ...action.payload };
+    case SET_USER_INFO:
       return { ...state, ...action.payload };
     default:
       return state;

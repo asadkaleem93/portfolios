@@ -64,7 +64,5 @@ export const uploadImages = (file: any): Promise<any> => {
       "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s"
     }
   };
-  console.log("FILE -->", file);
-
   return axios.post(`${url}uploadImages`, file, config);
 };

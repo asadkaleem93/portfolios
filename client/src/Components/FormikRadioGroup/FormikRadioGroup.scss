@@ -1,0 +1,14 @@
+@import "../../Assets/Scss/Required.scss";
+
+.ant-radio-group {
+  .ant-radio-wrapper-checked {
+    .ant-radio-checked {
+      .ant-radio-inner {
+        border-color: $appColor;
+        &:after {
+          background-color: $appColor;
+        }
+      }
+    }
+  }
+}
