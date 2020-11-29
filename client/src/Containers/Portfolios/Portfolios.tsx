@@ -10,7 +10,7 @@ import { getPortfolioInfo } from "../../Actions/portfolios";
 import "./Portfolios.scss";
 
 export const Portfolios = () => {
-  const { portfolioId = "" } = useParams<{ portfolioId?: string }>();
+  const { userName = "" } = useParams<{ userName?: string }>();
   const [state, setState] = React.useState<{
     isLoading: boolean;
     error: string;
@@ -21,12 +21,12 @@ export const Portfolios = () => {
 
   const { isLoading, error } = state;
   const { state: appState, dispatcher } = useAppContext();
-  const { portfolioCards } = appState;
-
+  const { portfolioCards, userInfo } = appState;
+  console.log("appState -->", appState);
   React.useEffect(() => {
-    if (portfolioId) {
+    if (userInfo.userName) {
       getPortfolioInfo({
-        userName: portfolioId,
+        userName: userName,
         dispatch: dispatcher,
       }).then((res) => {
         console.log("INNER res", res);
@@ -42,8 +42,11 @@ export const Portfolios = () => {
         //     isLoading: false,
         //   });
       });
+      setState({ ...state, isLoading: false });
+    } else {
+      setState({ ...state, isLoading: false });
     }
-  }, [portfolioId]);
+  }, [userName]);
 
   if (isLoading) return <Loader />;
   if (error.length > 0) return <div>Error occured</div>;

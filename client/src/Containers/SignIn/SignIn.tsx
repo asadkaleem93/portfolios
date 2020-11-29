@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Upload, Button, Radio } from "antd/es";
+import { useHistory } from "react-router-dom";
 import { Formik, FormikProps } from "formik";
 
 import { createUser } from "../../Actions/users";
@@ -43,6 +43,7 @@ const initialValues = {
 
 export const SignIn = () => {
   const { dispatcher } = useAppContext();
+  const history = useHistory();
   const radioButtons = React.useMemo(
     () => [
       {
@@ -60,7 +61,8 @@ export const SignIn = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={signInFormValidatioSchema}
-      onSubmit={(values: FormFieldsType) => {
+      onSubmit={(values: FormFieldsType, meta: any) => {
+        const { setFieldError } = meta;
         const data = new FormData();
         data.append("file", values.resume);
         data.append("email", values.email);
@@ -71,8 +73,16 @@ export const SignIn = () => {
         data.append("university", values.university);
         data.append("score", values.gpa);
         data.append("skills", values.skills);
+        data.append("gender", values.gender);
         data.append("interests", values.interests);
-        createUser(data, dispatcher);
+        createUser(data, dispatcher).then((res: any) => {
+          if (res.message && res.message === "User name already exists")
+            setFieldError("userName", res.message);
+          else if (res.message && res.message === "Email already exists")
+            setFieldError("email", res.message);
+
+          if (!res.message) history.push(`/${values.userName}`);
+        });
       }}
     >
       {({
@@ -86,17 +96,28 @@ export const SignIn = () => {
         dirty,
         isValid,
       }: FormikProps<FormFieldsType>) => {
-        console.log("VALUES -->", values);
-
         return (
           <div className="signInForm">
-            <div className="sectionConatinaer">
+            <div className="sectionContainer">
               <AppHeading text="Sign In" />
               <div className="fieldRow">
                 <FormikInputField name="email" placeHolder="Enter email" />
                 <FormikInputField
                   name="phoneNumber"
                   placeHolder="Enter Phone number"
+                />
+              </div>
+
+              <div className="fieldRow">
+                <FormikInputField
+                  name="password"
+                  placeHolder="Enter password"
+                  password
+                />
+                <FormikInputField
+                  name="confirmPassword"
+                  placeHolder="Confirm password"
+                  password
                 />
               </div>
               <div className="fieldRow">
@@ -106,18 +127,8 @@ export const SignIn = () => {
                   <FormikRadioGroup fields={radioButtons} name={"gender"} />
                 </div>
               </div>
-              <div className="fieldRow">
-                <FormikInputField
-                  name="password"
-                  placeHolder="Enter password"
-                />
-                <FormikInputField
-                  name="confirmPassword"
-                  placeHolder="Confirm password"
-                />
-              </div>
             </div>
-            <div className="sectionConatinaer">
+            <div className="sectionContainer">
               <AppHeading text="Portfolio Info" />
               <div className="fieldRow">
                 <FormikInputField name="degree" placeHolder="Enter Degree" />
@@ -128,12 +139,15 @@ export const SignIn = () => {
               </div>
               <div className="fieldRow">
                 <FormikInputField name="gpa" placeHolder="Enter Score" />
-                <FormikInputField name="skills" placeHolder="Enter Skills" />
+                <FormikInputField
+                  name="skills"
+                  placeHolder="Enter coma separated skills"
+                />
               </div>
               <div className="fieldRow">
                 <FormikInputField
                   name="interests"
-                  placeHolder="Enter Interestss"
+                  placeHolder="Enter coma separated interests"
                 />
                 <div className="fileUploader">
                   <FileUploader

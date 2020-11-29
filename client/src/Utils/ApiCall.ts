@@ -15,6 +15,7 @@ export const apiCall = (props: {
         data: payload,
         ...headers
       }).then((res) => {
+        console.log('---res', res)
         if (res.data.data ) {
           return res.data.data;
         }

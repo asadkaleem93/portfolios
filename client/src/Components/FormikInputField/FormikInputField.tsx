@@ -8,10 +8,11 @@ import "./FormikInputField.scss";
 type InputFieldType = {
   placeHolder: string;
   name: string;
+  password?: boolean;
 } & InputProps;
 
 export const FormikInputField = (props: InputFieldType) => {
-  const { name } = props;
+  const { name, password = false } = props;
   const [field, meta] = useField(name);
   const invalid = Boolean(meta.error && meta.touched);
   return (
@@ -22,11 +23,19 @@ export const FormikInputField = (props: InputFieldType) => {
       transitionName=""
     >
       <div className="formikInputField">
-        <Input
-          {...field}
-          {...props}
-          className={invalid ? `invalid ${props.className}` : props.className}
-        />
+        {!password ? (
+          <Input
+            {...field}
+            {...props}
+            className={invalid ? `invalid ${props.className}` : props.className}
+          />
+        ) : (
+          <Input.Password
+            {...field}
+            {...props}
+            className={invalid ? `invalid ${props.className}` : props.className}
+          />
+        )}
       </div>
     </Tooltip>
   );

@@ -2,9 +2,10 @@ import * as React from "react";
 import Search from "antd/es/input/Search";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
-import { Formik, FormikProps } from "formik";
+import { Formik, FormikProps, FieldArray } from "formik";
 
 import { AddCardModal } from "../../Components/AddCardModal/AddCardModal";
+import { PrimaryButton } from "../../Components/PrimaryButton/PrimaryButton";
 
 type PortfoliosContentHeaderType = {
   onCardSearch: (searchedString: string) => void;
@@ -40,13 +41,10 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
       />
       <Formik
         initialValues={{
-          name: "",
-          description: "",
-          link: "",
-          image: {},
+          cards: [{ name: "", description: "", link: "", image: {} }],
         }}
         // validationSchema={changePasswordValidations}
-        onSubmit={(values: FormFieldsType) =>
+        onSubmit={(values: { cards: FormFieldsType[] }) =>
           //   onSubmitForm(values, actions)
           console.log("--->", values)
         }
@@ -61,7 +59,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
           touched,
           dirty,
           isValid,
-        }: FormikProps<FormFieldsType>) => {
+        }: FormikProps<any>) => {
           return (
             <Modal
               title="Add Card"
@@ -72,7 +70,32 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                 resetForm();
               }}
             >
-              <AddCardModal setFieldValue={setFieldValue} />
+              <FieldArray
+                name="cards"
+                render={(arrayHelpers) => {
+                  return (
+                    <>
+                      {values.cards.map((card, index) => (
+                        <AddCardModal
+                          setFieldValue={setFieldValue}
+                          index={index}
+                        />
+                      ))}
+                      <PrimaryButton
+                        onClick={() =>
+                          arrayHelpers.push({
+                            name: "",
+                            description: "",
+                            link: "",
+                            image: {},
+                          })
+                        }
+                        label="Add card"
+                      />
+                    </>
+                  );
+                }}
+              />
             </Modal>
           );
         }}

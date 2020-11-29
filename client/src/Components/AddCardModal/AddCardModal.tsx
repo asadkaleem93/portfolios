@@ -4,18 +4,32 @@ import Upload from "antd/es/upload";
 import Button from "antd/es/button";
 import Icon from "antd/es/icon";
 
+import "./AddCardModal.scss";
+
 type AddCardModalType = {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  index: number;
 };
 
 export const AddCardModal = (props: AddCardModalType) => {
-  const { setFieldValue } = props;
+  const { setFieldValue, index } = props;
   return (
     <>
-      <FormikInputField name="name" placeHolder="Card Name" />
-      <FormikInputField name="description" placeHolder="Card Description" />
-      <FormikInputField name="link" placeHolder="Card Link" />
-      <Upload
+      <div className="sectionContainer">
+        <FormikInputField
+          name={`cards[${index}].name`}
+          placeHolder="Card Name"
+        />
+        <FormikInputField
+          name={`cards[${index}].description`}
+          placeHolder="Card Description"
+        />
+        <FormikInputField
+          name={`cards[${index}].link`}
+          placeHolder="Card Link"
+        />
+      </div>
+      {/* <Upload
         name="logo"
         // action="http://localhost:3001/uploadImages"
         accept="image/*"
@@ -37,11 +51,11 @@ export const AddCardModal = (props: AddCardModalType) => {
         // onRemove={() => onSaveOwnerImgLink("")}
         listType="picture"
         onRemove={() => setFieldValue("image", {})}
-      >
+      > 
         <Button>
           <Icon type="upload" /> Click to upload
         </Button>
-      </Upload>
+      </Upload>*/}
     </>
   );
 };

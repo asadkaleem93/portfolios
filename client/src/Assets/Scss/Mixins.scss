@@ -1,0 +1,9 @@
+@import "./Constants.scss";
+
+@mixin sectionContainer {
+  padding: $appPadding;
+  border: 0.05rem solid $appColor;
+  box-shadow: 0 0px 13px 2px rgba(17, 100, 155, 0.2);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
