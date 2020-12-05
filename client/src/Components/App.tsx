@@ -21,7 +21,11 @@ const App = () => {
             {/* <Header /> */}
             <div className="mainContent">
               <Route exact={true} path="/" component={SignInContainer} />
-              <Route exact={true} path="/:portfolioId" component={Portfolios} />
+              <Route
+                exact={true}
+                path="/portfolio/:userName"
+                component={Portfolios}
+              />
             </div>
             {/* <Footer /> */}
           </div>

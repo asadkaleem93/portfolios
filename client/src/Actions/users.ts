@@ -12,7 +12,6 @@ export const createUser =  (payload: any, dispatch: any) => {
     }).then((res) => {
       const formatedUser = formatUserInfo(res);
 
-      console.log('res formated-->', formatedUser, res)
       dispatch({
         type: SET_USER_INFO,
         payload: {

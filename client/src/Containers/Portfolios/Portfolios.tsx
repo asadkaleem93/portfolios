@@ -6,11 +6,11 @@ import { PortfoliosContent } from "../PortfoliosContent/PortfoliosContent";
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Loader } from "../../Components/Loader/Loader";
 import { useAppContext } from "../../Components/Contexts/AppContext";
-import { getPortfolioInfo } from "../../Actions/portfolios";
+import { getCompleteUserInfo } from "../../Actions/portfolios";
 import "./Portfolios.scss";
 
 export const Portfolios = () => {
-  const { userName = "" } = useParams<{ userName?: string }>();
+  const { userName: navUserName = "" } = useParams<{ userName?: string }>();
   const [state, setState] = React.useState<{
     isLoading: boolean;
     error: string;
@@ -21,42 +21,27 @@ export const Portfolios = () => {
 
   const { isLoading, error } = state;
   const { state: appState, dispatcher } = useAppContext();
-  const { portfolioCards, userInfo } = appState;
-  console.log("appState -->", appState);
   React.useEffect(() => {
-    if (userInfo.userName) {
-      getPortfolioInfo({
-        userName: userName,
+    if (navUserName) {
+      getCompleteUserInfo({
+        userName: navUserName,
         dispatch: dispatcher,
-      }).then((res) => {
-        console.log("INNER res", res);
-        // if (res === "Cards received")
-        //   setState({
-        //     ...state,
-        //     isLoading: false,
-        //   });
-        // else
-        //   setState({
-        //     ...state,
-        //     error: res,
-        //     isLoading: false,
-        //   });
       });
       setState({ ...state, isLoading: false });
     } else {
-      setState({ ...state, isLoading: false });
+      setState({ ...state, isLoading: false, error: "No data for this user" });
     }
-  }, [userName]);
+  }, [navUserName]);
 
   if (isLoading) return <Loader />;
-  if (error.length > 0) return <div>Error occured</div>;
+  if (error.length > 0) return <div>{state.error}</div>;
 
   return (
     <div className="portfoliosContainer">
       <Description />
       <div className="portfoliosDetail">
         <Sidebar />
-        <PortfoliosContent />
+        <PortfoliosContent userName={navUserName} />
       </div>
     </div>
   );

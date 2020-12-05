@@ -10,6 +10,7 @@ import { FormikRadioGroup } from "../../Components/FormikRadioGroup/FormikRadioG
 import { PrimaryButton } from "../../Components/PrimaryButton/PrimaryButton";
 import { FileUploader } from "../../Components/FileUploader/FileUploader";
 import { signInFormValidatioSchema } from "./metaData";
+import { FormikTextAreaField } from "../../Components/FormikTextArea/FormikTextArea";
 
 type FormFieldsType = {
   email: string;
@@ -23,6 +24,7 @@ type FormFieldsType = {
   skills: string;
   interests: string;
   gender: string;
+  describeYourSelf: string;
   resume?: any;
 };
 
@@ -38,6 +40,7 @@ const initialValues = {
   gpa: "",
   skills: "",
   interests: "",
+  describeYourSelf: "",
   resume: null,
 };
 
@@ -74,14 +77,15 @@ export const SignIn = () => {
         data.append("score", values.gpa);
         data.append("skills", values.skills);
         data.append("gender", values.gender);
-        data.append("interests", values.interests);
+        data.append("interest", values.interests);
+        data.append("describe_your_self", values.describeYourSelf);
         createUser(data, dispatcher).then((res: any) => {
           if (res.message && res.message === "User name already exists")
             setFieldError("userName", res.message);
           else if (res.message && res.message === "Email already exists")
             setFieldError("email", res.message);
 
-          if (!res.message) history.push(`/${values.userName}`);
+          if (!res.message) history.push(`/portfolio/${values.userName}`);
         });
       }}
     >
@@ -96,6 +100,7 @@ export const SignIn = () => {
         dirty,
         isValid,
       }: FormikProps<FormFieldsType>) => {
+        console.log("VALUES -->", values);
         return (
           <div className="signInForm">
             <div className="sectionContainer">
@@ -158,6 +163,10 @@ export const SignIn = () => {
                   />
                 </div>
               </div>
+              <FormikTextAreaField
+                name="describeYourSelf"
+                placeHolder="Describe Your Self"
+              />
             </div>
             <PrimaryButton onClick={() => handleSubmit()} label="Submit Form" />
           </div>

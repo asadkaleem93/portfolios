@@ -6,48 +6,49 @@ import { Formik, FormikProps, FieldArray } from "formik";
 
 import { AddCardModal } from "../../Components/AddCardModal/AddCardModal";
 import { PrimaryButton } from "../../Components/PrimaryButton/PrimaryButton";
+import { FormikInputField } from "../../Components/FormikInputField/FormikInputField";
+import { addCardValidationSchema } from "./metadata";
+import { AppContext, useAppContext } from "../../Components/Contexts/AppContext";
+import { setPortfolioCards } from "../../Actions/portfolios";
+import { jsonToFormData } from "../../Components/Utils/helpers";
 
 type PortfoliosContentHeaderType = {
   onCardSearch: (searchedString: string) => void;
+  userName: string;
 };
 
 type FormFieldsType = {
   name: string;
   description: string;
   link: string;
-  image: Object;
+  image: any;
 };
 
 export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
-  const { onCardSearch } = props;
+  const { onCardSearch, userName } = props;
   const [state, setState] = React.useState<{ modalVisibility: boolean }>({
     modalVisibility: false,
   });
   const { modalVisibility } = state;
+  const { dispatcher } = useAppContext();
   return (
     <>
-      <Button
-        type="primary"
-        style={{ marginRight: "15px" }}
-        onClick={() => setState({ ...state, modalVisibility: true })}
-      >
-        Add Card
+      <Button type="primary" style={{ marginRight: "15px" }} onClick={() => setState({ ...state, modalVisibility: true })}>
+        Add Cards
       </Button>
-      <Search
-        placeholder="Search you target"
-        allowClear
-        onSearch={onCardSearch}
-        style={{ width: 200 }}
-      />
+      <Search placeholder="Search you target" allowClear onSearch={onCardSearch} style={{ width: 200 }} />
       <Formik
         initialValues={{
-          cards: [{ name: "", description: "", link: "", image: {} }],
+          cards: [{ name: "", description: "", link: "", image: null }],
+          userInfo: { email: "", password: "" },
         }}
-        // validationSchema={changePasswordValidations}
-        onSubmit={(values: { cards: FormFieldsType[] }) =>
-          //   onSubmitForm(values, actions)
-          console.log("--->", values)
-        }
+        validationSchema={addCardValidationSchema}
+        onSubmit={(values: { cards: FormFieldsType[]; userInfo: { email: string; password: string } }) => {
+          setPortfolioCards({
+            data: jsonToFormData({ ...values, userInfo: { ...values.userInfo, user_name: userName } }),
+            dispatch: dispatcher,
+          });
+        }}
       >
         {({
           values,
@@ -59,10 +60,13 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
           touched,
           dirty,
           isValid,
-        }: FormikProps<any>) => {
+        }: FormikProps<{
+          cards: FormFieldsType[];
+          userInfo: { email: string; password: string };
+        }>) => {
           return (
             <Modal
-              title="Add Card"
+              title="Add Cards"
               visible={modalVisibility}
               onOk={() => setState({ ...state, modalVisibility: false })}
               onCancel={() => {
@@ -76,10 +80,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                   return (
                     <>
                       {values.cards.map((card, index) => (
-                        <AddCardModal
-                          setFieldValue={setFieldValue}
-                          index={index}
-                        />
+                        <AddCardModal setFieldValue={setFieldValue} index={index} />
                       ))}
                       <PrimaryButton
                         onClick={() =>
@@ -87,7 +88,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                             name: "",
                             description: "",
                             link: "",
-                            image: {},
+                            image: null,
                           })
                         }
                         label="Add card"
@@ -96,6 +97,11 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                   );
                 }}
               />
+              <div style={{ marginTop: "35px" }}>
+                <FormikInputField name="userInfo.email" placeHolder="Email" />
+                <FormikInputField name="userInfo.password" placeHolder="password" password />
+              </div>
+              <PrimaryButton label="Submit Cards" onClick={() => handleSubmit()} />
             </Modal>
           );
         }}

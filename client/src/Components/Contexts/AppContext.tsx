@@ -19,8 +19,6 @@ const defaultAppState: AppStateType = {
 
 const appContextReducer = (state, action) => {
   switch (action.type) {
-    case SET_PORTFOLIO_CARDS:
-      return { ...state, ...action.payload };
     case SET_USER_INFO:
       return { ...state, ...action.payload };
     default:

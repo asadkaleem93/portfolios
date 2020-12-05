@@ -1,0 +1,15 @@
+@import "../../Assets/Scss/Required.scss";
+
+.formikTextAreaField {
+  .ant-input {
+    &:hover,
+    &:focus {
+      border-color: $appColor;
+      box-shadow: $appColorFieldShadow;
+    }
+    &.invalid {
+      border-color: $errorColor;
+      box-shadow: $errorColorFieldShadow;
+    }
+  }
+}

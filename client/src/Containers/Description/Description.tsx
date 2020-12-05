@@ -1,12 +1,12 @@
 import * as React from "react";
 
+import { useAppContext } from "../../Components/Contexts/AppContext";
+
 import "./Description.scss";
 
 export const Description = () => {
-  return (
-    <div className="portfoliosDescription">
-      Describe your self with you uniqueness and the abilities you have in 100
-      words
-    </div>
-  );
+  const { state } = useAppContext();
+  const { userInfo } = state;
+  const { describeYourSelf } = userInfo;
+  return <div className="portfoliosDescription">{describeYourSelf}</div>;
 };

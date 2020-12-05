@@ -14,6 +14,7 @@ export const signInFormValidatioSchema = yup.object().shape({
     return confirmPassword === this.parent.password;
   }),
   phoneNumber: yup.string().required('Phone Number is required'),
+  describeYourSelf: yup.string().required('Describe your self field is required'),
   userName: yup.string().required('User name is required'),
   degree: yup.string(),
   university: yup.string(),

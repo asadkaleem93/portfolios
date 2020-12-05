@@ -1,10 +1,8 @@
 import * as React from "react";
 import { FormikInputField } from "../FormikInputField/FormikInputField";
-import Upload from "antd/es/upload";
-import Button from "antd/es/button";
-import Icon from "antd/es/icon";
 
 import "./AddCardModal.scss";
+import { FileUploader } from "../FileUploader/FileUploader";
 
 type AddCardModalType = {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -28,34 +26,15 @@ export const AddCardModal = (props: AddCardModalType) => {
           name={`cards[${index}].link`}
           placeHolder="Card Link"
         />
+
+        <FileUploader
+          onUpload={(file: any) => {
+            setFieldValue(`cards[${index}].image`, file);
+          }}
+          onDeleteFile={() => setFieldValue(`cards[${index}].image`, null)}
+          fileType="img"
+        />
       </div>
-      {/* <Upload
-        name="logo"
-        // action="http://localhost:3001/uploadImages"
-        accept="image/*"
-        customRequest={(options: any) => {
-          const data = new FormData();
-          setFieldValue("image", options.file);
-          data.append("file", options.file);
-          console.log("DATA -->", options);
-          //   uploadImages(data)
-          //     .then((res: any) => {
-          //       console.log("RES -->", res);
-          //     //   onSaveOwnerImgLink(res.data);
-          //     //   options.onSuccess(res.data, options.file);
-          //     })
-          //     .catch((err: Error) => {
-          //       console.log(err);
-          //     });
-        }}
-        // onRemove={() => onSaveOwnerImgLink("")}
-        listType="picture"
-        onRemove={() => setFieldValue("image", {})}
-      > 
-        <Button>
-          <Icon type="upload" /> Click to upload
-        </Button>
-      </Upload>*/}
     </>
   );
 };
