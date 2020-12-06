@@ -23,15 +23,22 @@ router.post("/getCompleteInfo", async (apiRequest, apiResponse) => {
   dbConnection
     .one("SELECT * FROM user_info WHERE user_name = ${user_name};", apiRequest.body)
     .then((res) => {
-      dbConnection.many("SELECT * FROM portfolio_info WHERE user_name = ${user_name};", apiRequest.body).then((portfolioRes) => {
-        const { password, ...rest } = res;
-        apiResponse.send({
-          data: {
-            user_info: rest,
-            portfolio_info: portfolioRes,
-          },
+      const { password, ...rest } = res;
+      dbConnection
+        .many("SELECT * FROM portfolio_info WHERE user_name = ${user_name};", apiRequest.body)
+        .then((portfolioRes) => {
+          apiResponse.send({
+            data: {
+              user_info: rest,
+              portfolio_info: portfolioRes,
+            },
+          });
+        })
+        .catch((err) => {
+          apiResponse.send({
+            data: { user_info: rest, portfolio_info: [] },
+          });
         });
-      });
     })
     .catch((err) => {
       apiResponse.send({
@@ -131,58 +138,164 @@ router.get("/getResume", (req, res) => {
   });
 });
 
+router.get("/getImage", (req, res) => {
+  const mime = {
+    jpg: "image/jpeg",
+    png: "image/png",
+    svg: "image/svg+xml",
+  };
+  // const type = mime[path.extname(file).slice(1)] || "text/plain";
+  console.log("req.query.q -->", req);
+  const splitType = req.query.q.split(".");
+  const typeLength = splitType.length;
+  const type = splitType[typeLength - 1];
+  fs.readFile(req.query.q, function (err, content) {
+    if (err) {
+      res.writeHead(400, { "Content-type": "text/html" });
+      console.log(err);
+      res.end("No Image available");
+    } else {
+      //specify the content type in the response will be an image
+      res.writeHead(200, { "Content-type": mime[type] });
+      res.write(content);
+      res.end(content);
+    }
+  });
+});
+
 router.post("/setPortfolioCards", multipartMiddleware, (apiRequest, apiResponse) => {
   const { data } = apiRequest.body;
   const { data: cardsData = {} } = apiRequest.files;
   const { cards: imageCards = [] } = cardsData;
   const { userInfo, cards } = data;
-  const query = "INSERT INTO portfolio_info (name, description, url, img_link, user_name) VALUES (${name}, ${description}, ${link}, ${img_link}, ${user_name}) returning ${user_name};";
   verifyUser(userInfo).then(async (userName) => {
     if (userName === "Credentials Mis matched" || userName === "Credentials does not match the navigation user name") {
       apiResponse.send({
         error: "Credentials Mismatched, Please enter correct credentials",
       });
     } else {
-      const updatedCards = cards.reduce((acc, card, index) => {
-        console.log("ACC -->", acc);
-        const image = imageCards.find((imageCard) => imageCard.image.fieldName.includes(`[${index}]`));
-        if (!image) {
-          const updatedData = {
-            img_link: "",
-            user_name: userName,
-            ...card,
-          };
-          dbConnection
-            .one(query, updatedData)
-            .then(() => {
-              console.log(";;;;", [...acc, updatedData]);
-              return [...acc, updatedData];
-            })
-            .catch((err) => {});
-        } else {
-          fs.readFile(image.image.path, function (err, data) {
-            const savingPath = `${__dirname}/uploads/images/${userName}-${card.name}-${image.image.originalFilename}`;
-            const newPath = `/getImage?q=${savingPath}`;
-            const updatedData = {
-              img_link: newPath,
-              user_name: userName,
-              ...card,
-            };
-            dbConnection
-              .one(query, updatedData)
-              .then(() => {
+      dbConnection
+        .task(async (t) => {
+          const itemDetails = cards.map(async (card, index) => {
+            const image = imageCards.find((imageCard) => imageCard.image.fieldName.includes(`[${index}]`));
+            let updatedData;
+            if (!image) {
+              updatedData = {
+                img_link: "",
+                user_name: userName,
+                ...card,
+              };
+            } else {
+              const savingPath = `${__dirname}/uploads/images/${userName}-${card.name}-${image.image.originalFilename}`;
+              const newPath = `/getImage?q=${savingPath}`;
+              updatedData = {
+                img_link: newPath,
+                user_name: userName,
+                ...card,
+              };
+              fs.readFile(image.image.path, function (err, data) {
                 fs.writeFile(savingPath, data, function (err) {});
-                console.log("second ;;;;", [...acc, updatedData]);
-                return [...acc, updatedData];
-              })
-              .catch((err) => {});
+              });
+            }
+            const query = await t.one("INSERT INTO portfolio_info (name, description, url, img_link, user_name) VALUES (${name}, ${description}, ${url}, ${img_link}, ${user_name}) returning id, img_link;", updatedData);
+            updatedData = {};
+            return { query };
           });
-        }
-      }, []);
-      console.log("updatedCards -->", updatedCards);
+
+          const details = await t.batch(itemDetails);
+
+          return { details };
+        })
+        .then((events, index) => {
+          const updatedResp = events.details.map((event, index) => {
+            const { image, ...rest } = cards[index];
+            return {
+              ...event.query,
+              ...rest,
+              user_name: userName,
+            };
+          });
+          apiResponse.send({
+            data: updatedResp,
+          });
+        })
+        .catch((err) => {
+          apiResponse.send({
+            error: err,
+          });
+        });
+    }
+  });
+});
+
+router.delete("/deletePortfolioCard", (apiRequest, apiResponse) => {
+  const query = "DELETE FROM portfolio_info WHERE id = ${id} AND user_name = ${userName} RETURNING *;";
+  dbConnection
+    .one(query, apiRequest.body)
+    .then((res) => {
       apiResponse.send({
-        data: updatedCards,
+        data: "Row deleted successfully",
       });
+    })
+    .catch((err) => {
+      apiResponse.send({
+        error: err,
+      });
+    });
+});
+
+router.post("/updatePortfolioCard", multipartMiddleware, (apiRequest, apiResponse) => {
+  const { data } = apiRequest.body;
+  const { data: imageData = {} } = apiRequest.files;
+  const { image } = imageData;
+
+  verifyUser({ email: data.email, password: data.password, user_name: data.userName }).then((userName) => {
+    if (userName === "Credentials Mis matched" || userName === "Credentials does not match the navigation user name") {
+      apiResponse.send({
+        error: "Credentials Mismatched, Please enter correct credentials",
+      });
+    } else {
+      if (image) {
+        const savingPath = `${__dirname}/uploads/images/${userName}-${data.name}-${image.originalFilename}`;
+        const newPath = `/getImage?q=${savingPath}`;
+        updatedData = {
+          ...data,
+          img_link: newPath,
+        };
+        console.log("UPDATED DATA -->", updatedData);
+        fs.readFile(image.path, function (err, data) {
+          fs.writeFile(savingPath, data, function (err) {});
+        });
+
+        // TODO: reuse this connection
+        const query = "UPDATE portfolio_info SET name = ${name}, description = ${description}, url = ${url}, img_link = ${img_link} WHERE user_name = ${userName} AND id = ${id} RETURNING *;";
+        dbConnection
+          .one(query, updatedData)
+          .then((res) => {
+            apiResponse.send({
+              data: res,
+            });
+          })
+          .catch((err) => {
+            apiResponse.send({
+              error: err,
+            });
+          });
+      } else {
+        const query = "UPDATE portfolio_info SET name = ${name}, description = ${description}, url = ${url} WHERE user_name = ${userName} AND id = ${id} RETURNING *;";
+        dbConnection
+          .one(query, data)
+          .then((res) => {
+            apiResponse.send({
+              data: res,
+            });
+          })
+          .catch((err) => {
+            apiResponse.send({
+              error: err,
+            });
+          });
+      }
     }
   });
 });

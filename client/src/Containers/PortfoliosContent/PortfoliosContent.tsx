@@ -7,9 +7,10 @@ import { PortfoliosContentHeader } from "../PortfoliosContentHeader/PortfoliosCo
 import "./PortfoliosContent.scss";
 
 export const PortfoliosContent = (props: { userName: string }) => {
-  const { state: appState } = useAppContext();
+  const { state: appState, dispatcher } = useAppContext();
   const { userName } = props;
   const { portfolioCards } = appState;
+  console.log("portfolioCards -->", portfolioCards);
   const [state, setState] = React.useState({
     searchedString: "",
   });
@@ -33,7 +34,7 @@ export const PortfoliosContent = (props: { userName: string }) => {
         {updatedCards.map((card: PortfolioCardType) => (
           // ADD LINK CHECK
           <a href={card.url} target="_blank">
-            <PortfolioCard card={card} />
+            <PortfolioCard card={card} dispatcher={dispatcher} />
           </a>
         ))}
       </div>

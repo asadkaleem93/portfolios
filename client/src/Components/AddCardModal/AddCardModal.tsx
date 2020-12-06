@@ -14,18 +14,9 @@ export const AddCardModal = (props: AddCardModalType) => {
   return (
     <>
       <div className="sectionContainer">
-        <FormikInputField
-          name={`cards[${index}].name`}
-          placeHolder="Card Name"
-        />
-        <FormikInputField
-          name={`cards[${index}].description`}
-          placeHolder="Card Description"
-        />
-        <FormikInputField
-          name={`cards[${index}].link`}
-          placeHolder="Card Link"
-        />
+        <FormikInputField name={`cards[${index}].name`} placeHolder="Card Name" />
+        <FormikInputField name={`cards[${index}].description`} placeHolder="Card Description" />
+        <FormikInputField name={`cards[${index}].url`} placeHolder="Card Link" />
 
         <FileUploader
           onUpload={(file: any) => {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useHistory } from "react-router-dom";
 import { Formik, FormikProps } from "formik";
 
-import { createUser } from "../../Actions/users";
+import { createUser } from "../../Actions/usersActions";
 import { useAppContext } from "../../Components/Contexts/AppContext";
 import { FormikInputField } from "../../Components/FormikInputField/FormikInputField";
 import { AppHeading } from "../../Components/AppHeading/AppHeading";
@@ -80,26 +80,14 @@ export const SignIn = () => {
         data.append("interest", values.interests);
         data.append("describe_your_self", values.describeYourSelf);
         createUser(data, dispatcher).then((res: any) => {
-          if (res.message && res.message === "User name already exists")
-            setFieldError("userName", res.message);
-          else if (res.message && res.message === "Email already exists")
-            setFieldError("email", res.message);
+          if (res.message && res.message === "User name already exists") setFieldError("userName", res.message);
+          else if (res.message && res.message === "Email already exists") setFieldError("email", res.message);
 
           if (!res.message) history.push(`/portfolio/${values.userName}`);
         });
       }}
     >
-      {({
-        values,
-        setFieldValue,
-        resetForm,
-        setFieldTouched,
-        handleSubmit,
-        errors,
-        touched,
-        dirty,
-        isValid,
-      }: FormikProps<FormFieldsType>) => {
+      {({ values, setFieldValue, resetForm, setFieldTouched, handleSubmit, errors, touched, dirty, isValid }: FormikProps<FormFieldsType>) => {
         console.log("VALUES -->", values);
         return (
           <div className="signInForm">
@@ -107,23 +95,12 @@ export const SignIn = () => {
               <AppHeading text="Sign In" />
               <div className="fieldRow">
                 <FormikInputField name="email" placeHolder="Enter email" />
-                <FormikInputField
-                  name="phoneNumber"
-                  placeHolder="Enter Phone number"
-                />
+                <FormikInputField name="phoneNumber" placeHolder="Enter Phone number" />
               </div>
 
               <div className="fieldRow">
-                <FormikInputField
-                  name="password"
-                  placeHolder="Enter password"
-                  password
-                />
-                <FormikInputField
-                  name="confirmPassword"
-                  placeHolder="Confirm password"
-                  password
-                />
+                <FormikInputField name="password" placeHolder="Enter password" password />
+                <FormikInputField name="confirmPassword" placeHolder="Confirm password" password />
               </div>
               <div className="fieldRow">
                 <FormikInputField name="userName" placeHolder="Username" />
@@ -137,23 +114,14 @@ export const SignIn = () => {
               <AppHeading text="Portfolio Info" />
               <div className="fieldRow">
                 <FormikInputField name="degree" placeHolder="Enter Degree" />
-                <FormikInputField
-                  name="university"
-                  placeHolder="Enter University"
-                />
+                <FormikInputField name="university" placeHolder="Enter University" />
               </div>
               <div className="fieldRow">
                 <FormikInputField name="gpa" placeHolder="Enter Score" />
-                <FormikInputField
-                  name="skills"
-                  placeHolder="Enter coma separated skills"
-                />
+                <FormikInputField name="skills" placeHolder="Enter coma separated skills" />
               </div>
               <div className="fieldRow">
-                <FormikInputField
-                  name="interests"
-                  placeHolder="Enter coma separated interests"
-                />
+                <FormikInputField name="interests" placeHolder="Enter coma separated interests" />
                 <div className="fileUploader">
                   <FileUploader
                     onUpload={(file: any) => {
@@ -163,10 +131,7 @@ export const SignIn = () => {
                   />
                 </div>
               </div>
-              <FormikTextAreaField
-                name="describeYourSelf"
-                placeHolder="Describe Your Self"
-              />
+              <FormikTextAreaField name="describeYourSelf" placeHolder="Describe Your Self" />
             </div>
             <PrimaryButton onClick={() => handleSubmit()} label="Submit Form" />
           </div>

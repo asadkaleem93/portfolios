@@ -22,7 +22,7 @@ export const apiCall = (props: {
           PushNotification({
             message: res.data.error,
           });
-          return res.data.error
+          // return res.data.error
         }
       });
 }

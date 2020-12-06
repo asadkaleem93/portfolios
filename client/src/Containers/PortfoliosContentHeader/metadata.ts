@@ -5,7 +5,7 @@ export const addCardValidationSchema = yup.object().shape({
         yup.object().shape({
             name: yup.string().required('Name is required'),
             description: yup.string().required('Description is required'),
-            link: yup.string(),
+            url: yup.string(),
         })
     ),
     userInfo: yup.object().shape({

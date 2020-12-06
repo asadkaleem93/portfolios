@@ -8,9 +8,9 @@ import { AddCardModal } from "../../Components/AddCardModal/AddCardModal";
 import { PrimaryButton } from "../../Components/PrimaryButton/PrimaryButton";
 import { FormikInputField } from "../../Components/FormikInputField/FormikInputField";
 import { addCardValidationSchema } from "./metadata";
-import { AppContext, useAppContext } from "../../Components/Contexts/AppContext";
-import { setPortfolioCards } from "../../Actions/portfolios";
-import { jsonToFormData } from "../../Components/Utils/helpers";
+import { useAppContext } from "../../Components/Contexts/AppContext";
+import { setPortfolioCards } from "../../Actions/portfoliosAction";
+import { jsonToFormData } from "../../Utils/helpers";
 
 type PortfoliosContentHeaderType = {
   onCardSearch: (searchedString: string) => void;
@@ -20,7 +20,7 @@ type PortfoliosContentHeaderType = {
 type FormFieldsType = {
   name: string;
   description: string;
-  link: string;
+  url: string;
   image: any;
 };
 
@@ -39,7 +39,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
       <Search placeholder="Search you target" allowClear onSearch={onCardSearch} style={{ width: 200 }} />
       <Formik
         initialValues={{
-          cards: [{ name: "", description: "", link: "", image: null }],
+          cards: [{ name: "", description: "", url: "", image: null }],
           userInfo: { email: "", password: "" },
         }}
         validationSchema={addCardValidationSchema}
@@ -54,12 +54,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
           values,
           setFieldValue,
           resetForm,
-          setFieldTouched,
           handleSubmit,
-          errors,
-          touched,
-          dirty,
-          isValid,
         }: FormikProps<{
           cards: FormFieldsType[];
           userInfo: { email: string; password: string };
@@ -87,7 +82,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                           arrayHelpers.push({
                             name: "",
                             description: "",
-                            link: "",
+                            url: "",
                             image: null,
                           })
                         }

@@ -6,7 +6,7 @@ import { PortfoliosContent } from "../PortfoliosContent/PortfoliosContent";
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Loader } from "../../Components/Loader/Loader";
 import { useAppContext } from "../../Components/Contexts/AppContext";
-import { getCompleteUserInfo } from "../../Actions/portfolios";
+import { getCompleteUserInfo } from "../../Actions/portfoliosAction";
 import "./Portfolios.scss";
 
 export const Portfolios = () => {

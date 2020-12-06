@@ -2,11 +2,13 @@ import React, { useRef, useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 
 import "./FileUploader.scss";
+import { apiUrl } from "../../Utils/AppConstants";
 
 type componentProps = {
   onUpload: (file: UploadedSignatureType) => void;
   onDeleteFile?: () => void;
   fileType?: "text" | "img";
+  imgSrc?: string;
 };
 
 export interface UploadedSignatureType {
@@ -19,9 +21,8 @@ export interface UploadedSignatureType {
 }
 
 export const FileUploader = (props: componentProps): JSX.Element => {
-  const { onUpload, onDeleteFile = () => {}, fileType = "text" } = props;
-  const [file, setFile] = useState("");
-
+  const { onUpload, onDeleteFile = () => {}, fileType = "text", imgSrc = "" } = props;
+  const [file, setFile] = useState(imgSrc ? `http://localhost:3001${imgSrc}` : "");
   const uploadFile = (uploadedFile: any): void => {
     if (uploadedFile && uploadedFile.type.includes("text/plain")) {
       setFile(uploadedFile.name);
@@ -31,11 +32,7 @@ export const FileUploader = (props: componentProps): JSX.Element => {
 
   const uploadImg = (uploadedFile: any): void => {
     const fileReader = new FileReader();
-    if (
-      uploadedFile &&
-      uploadedFile.type &&
-      uploadedFile.type.includes("image")
-    ) {
+    if (uploadedFile && uploadedFile.type && uploadedFile.type.includes("image")) {
       fileReader.readAsDataURL(uploadedFile);
       fileReader.onload = async (event: any): Promise<any> => {
         if (uploadedFile) {
@@ -55,22 +52,19 @@ export const FileUploader = (props: componentProps): JSX.Element => {
             key={file}
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
               const file = e.target.files ? e.target.files[0] : {};
-              if (file)
-                fileType === "text" ? uploadFile(file) : uploadImg(file);
+              if (file) fileType === "text" ? uploadFile(file) : uploadImg(file);
               else {
                 onDeleteFile();
                 setFile("");
               }
             }}
-            accept={`${
-              fileType === "text" ? "text/plain, application/pdf" : "image/*"
-            }`}
+            accept={`${fileType === "text" ? "text/plain, application/pdf" : "image/*"}`}
           />
           <span className="attach-text">
             <span>Attach</span>
           </span>
         </label>
-        {fileType === "img" && file.length ? (
+        {(fileType === "img" && file.length) || file ? (
           <span className="imgWrapper">
             <img width="40" height="40" src={file} />
           </span>
