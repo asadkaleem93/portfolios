@@ -87,8 +87,7 @@ export const SignIn = () => {
         });
       }}
     >
-      {({ values, setFieldValue, resetForm, setFieldTouched, handleSubmit, errors, touched, dirty, isValid }: FormikProps<FormFieldsType>) => {
-        console.log("VALUES -->", values);
+      {({ setFieldValue, handleSubmit }: FormikProps<FormFieldsType>) => {
         return (
           <div className="signInForm">
             <div className="sectionContainer">

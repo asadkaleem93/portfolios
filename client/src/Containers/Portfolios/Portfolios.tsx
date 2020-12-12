@@ -40,7 +40,7 @@ export const Portfolios = () => {
     <div className="portfoliosContainer">
       <Description />
       <div className="portfoliosDetail">
-        <Sidebar />
+        <Sidebar userName={navUserName} />
         <PortfoliosContent userName={navUserName} />
       </div>
     </div>

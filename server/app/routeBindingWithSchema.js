@@ -127,7 +127,6 @@ router.get("/getResume", (req, res) => {
   fs.readFile(req.query.q, { encoding: "utf-8" }, function (err, content) {
     if (err) {
       res.writeHead(400, { "Content-type": "text/html" });
-      console.log(err);
       res.end("No resume available for this user");
     } else {
       //specify the content type in the response will be an image
@@ -144,15 +143,12 @@ router.get("/getImage", (req, res) => {
     png: "image/png",
     svg: "image/svg+xml",
   };
-  // const type = mime[path.extname(file).slice(1)] || "text/plain";
-  console.log("req.query.q -->", req);
   const splitType = req.query.q.split(".");
   const typeLength = splitType.length;
   const type = splitType[typeLength - 1];
   fs.readFile(req.query.q, function (err, content) {
     if (err) {
       res.writeHead(400, { "Content-type": "text/html" });
-      console.log(err);
       res.end("No Image available");
     } else {
       //specify the content type in the response will be an image
@@ -262,7 +258,6 @@ router.post("/updatePortfolioCard", multipartMiddleware, (apiRequest, apiRespons
           ...data,
           img_link: newPath,
         };
-        console.log("UPDATED DATA -->", updatedData);
         fs.readFile(image.path, function (err, data) {
           fs.writeFile(savingPath, data, function (err) {});
         });
@@ -282,12 +277,72 @@ router.post("/updatePortfolioCard", multipartMiddleware, (apiRequest, apiRespons
             });
           });
       } else {
-        const query = "UPDATE portfolio_info SET name = ${name}, description = ${description}, url = ${url} WHERE user_name = ${userName} AND id = ${id} RETURNING *;";
+        const query = "UPDATE portfolio_info SET name = ${name}, description = ${description}, url = ${url}, img_link = ${imgLink} WHERE user_name = ${userName} AND id = ${id} RETURNING *;";
         dbConnection
           .one(query, data)
           .then((res) => {
             apiResponse.send({
               data: res,
+            });
+          })
+          .catch((err) => {
+            apiResponse.send({
+              error: err,
+            });
+          });
+      }
+    }
+  });
+});
+
+router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse) => {
+  const { data } = apiRequest.body;
+  const { data: fileData = {} } = apiRequest.files;
+  const { newResume } = fileData;
+  verifyUser({ email: data.email, password: data.password, user_name: data.userName }).then((userName) => {
+    if (userName === "Credentials Mis matched" || userName === "Credentials does not match the navigation user name") {
+      apiResponse.send({
+        error: "Credentials Mismatched, Please enter correct credentials",
+      });
+    } else {
+      if (newResume) {
+        const fileName = newResume.name || "";
+        const savingPath = `${__dirname}/uploads/resumes/${userName}-${fileName}`;
+        const newPath = `/getResume?q=${savingPath}`;
+        updatedData = {
+          ...data,
+          resume_link: newPath,
+        };
+        fs.readFile(newResume.path, function (err, data) {
+          fs.writeFile(savingPath, data, function (err) {});
+        });
+        // TODO: reuse this connection
+        const query = updatedData.newPassword.length
+          ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${newPassword} WHERE user_name = ${userName} RETURNING *;"
+          : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}  WHERE user_name = ${userName} RETURNING *;";
+        dbConnection
+          .one(query, updatedData)
+          .then((res) => {
+            const { password, ...rest } = res;
+            apiResponse.send({
+              data: rest,
+            });
+          })
+          .catch((err) => {
+            apiResponse.send({
+              error: err,
+            });
+          });
+      } else {
+        const query = data.newPassword.length
+          ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${newPassword} WHERE user_name = ${userName} RETURNING *;"
+          : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests} WHERE user_name = ${userName} RETURNING *;";
+        dbConnection
+          .one(query, data)
+          .then((res) => {
+            const { password, ...rest } = res;
+            apiResponse.send({
+              data: rest,
             });
           })
           .catch((err) => {

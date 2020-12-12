@@ -7,6 +7,7 @@ export const SET_PORTFOLIO_CARDS = "SET_PORTFOLIO_CARDS";
 export const DELETE_PORTFOLIO_CARD = "DELETE_PORTFOLIO_CARD";
 export const UPDATE_PORTFOLIO_CARD = "UPDATE_PORTFOLIO_CARD";
 export const SET_USER_INFO = "SET_USER_INFO";
+export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 
 type AppStateType = ({} & PortfolioCardType & UserFieldsType) | any;
 
@@ -28,6 +29,8 @@ const appContextReducer = (state, action) => {
       return { ...state, portfolioCards: [...state.portfolioCards, ...action.payload] };
     case DELETE_PORTFOLIO_CARD:
       return { ...state, portfolioCards: state.portfolioCards.filter((card: PortfolioCardType) => card.id !== action.payload) };
+    case UPDATE_USER_INFO:
+      return { ...state, userInfo: action.payload };
     case UPDATE_PORTFOLIO_CARD:
       return {
         ...state,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useAppContext } from "../../Components/Contexts/AppContext";
 import { PortfolioCard } from "../../Components/PortfolioCard/PortfolioCard";
-import { PortfolioCardType, UserFieldsType } from "../../Utils/Types";
+import { PortfolioCardType } from "../../Utils/Types";
 import { PortfoliosContentHeader } from "../PortfoliosContentHeader/PortfoliosContentHeader";
 
 import "./PortfoliosContent.scss";
@@ -10,7 +10,6 @@ export const PortfoliosContent = (props: { userName: string }) => {
   const { state: appState, dispatcher } = useAppContext();
   const { userName } = props;
   const { portfolioCards } = appState;
-  console.log("portfolioCards -->", portfolioCards);
   const [state, setState] = React.useState({
     searchedString: "",
   });

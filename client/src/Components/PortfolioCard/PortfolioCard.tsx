@@ -9,9 +9,9 @@ import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
 import { FormikInputField } from "../FormikInputField/FormikInputField";
 import { PortfolioCardType } from "../../Utils/Types";
 import { deletePortfolioCard, updatePortfolioCard } from "../../Actions/portfoliosAction";
-import { jsonToFormData } from "../../Utils/helpers";
 import { FileUploader } from "../FileUploader/FileUploader";
 import { EmailPasswordFields } from "../EmailPasswordFields/EmailPasswordFields";
+import { updateCardValidationSchema } from "./metaData";
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
@@ -63,10 +63,10 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
       </div>
     );
   };
-
+  const imgSrc = imgLink ? `http://localhost:3001${imgLink}` : `${process.env.PUBLIC_URL}/card-blank-slate.jpg`;
   return (
     <>
-      <Card hoverable cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" height="150px" />}>
+      <Card hoverable cover={<img alt="example" src={imgSrc} width="100%" height="150px" />}>
         <Meta title={<CardTitle name={name} />} description={<Paragraph ellipsis={{ rows: 5 }}>{description}</Paragraph>} />
       </Card>
       <Formik
@@ -81,14 +81,12 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
           email: "",
           password: "",
         }}
-        // validationSchema={addCardValidationSchema}
+        validationSchema={updateCardValidationSchema}
         onSubmit={(values: PortfolioCardType) => {
-          const formatedFormData = jsonToFormData(values);
           updatePortfolioCard({ data: values, dispatch: dispatcher });
         }}
       >
-        {({ values, touched, setFieldValue, resetForm, setFieldTouched, handleSubmit, errors, dirty, isValid }: FormikProps<FormFieldsType>) => {
-          console.log("values.imgLink -->", values.imgLink);
+        {({ values, setFieldValue, resetForm, handleSubmit }: FormikProps<FormFieldsType>) => {
           return (
             <Modal
               title="Edit Card"
@@ -108,11 +106,11 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
                 }}
                 onDeleteFile={() => {
                   setFieldValue("image", null);
+                  setFieldValue("imgLink", "");
                 }}
                 imgSrc={values.imgLink}
                 fileType="img"
               />
-              {/* <FormikInputField name="userName" placeHolder="User name" /> */}
               <EmailPasswordFields />
 
               <PrimaryButton label="Submit Card" onClick={() => handleSubmit()} />

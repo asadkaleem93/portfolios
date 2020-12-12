@@ -1,4 +1,4 @@
-import { SET_USER_INFO, SET_PORTFOLIO_CARDS, DELETE_PORTFOLIO_CARD, UPDATE_PORTFOLIO_CARD } from "../Components/Contexts/AppContext";
+import { SET_USER_INFO, SET_PORTFOLIO_CARDS, DELETE_PORTFOLIO_CARD, UPDATE_PORTFOLIO_CARD, UPDATE_USER_INFO } from "../Components/Contexts/AppContext";
 import { formatPortfolio, formatPortfolios } from "../Transformers/PortfoliosTransformers";
 import { formatUserInfo } from "../Transformers/UsersTransformers";
 import { apiCall } from "../Utils/ApiCall";
@@ -67,6 +67,24 @@ export const updatePortfolioCard = (props: {
         dispatch({
         type: UPDATE_PORTFOLIO_CARD,
         payload: formatedPortfolioCard
+      })
+    }
+  })
+}
+
+export const updateUserInfo = (props: {
+  data: any;
+  dispatch: any;
+}) => {
+  const {data, dispatch} = props;
+  const formData = jsonToFormData(data);
+  return apiCall({url: "updateUserInfoCard", payload: formData}).then((res) => {
+    console.log('RES -->', res)
+    if(res) {
+      const formatedUserInfo = formatUserInfo(res)
+        dispatch({
+        type: UPDATE_USER_INFO,
+        payload: formatedUserInfo
       })
     }
   })
