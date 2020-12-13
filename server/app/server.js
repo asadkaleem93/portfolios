@@ -13,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // route middleware that will happen on every request
 app.use(async function(req, res, next) {
-  console.log('REQ METHOD AND URL -->', req.method, req.url);
   // continue doing what we were doing and go to the route
   next();
 });

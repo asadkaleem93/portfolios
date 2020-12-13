@@ -10,15 +10,16 @@ export const createUser =  (payload: any, dispatch: any) => {
         }
       } 
     }).then((res) => {
-      const formatedUser = formatUserInfo(res);
-
-      dispatch({
-        type: SET_USER_INFO,
-        payload: {
-          userInfo: formatedUser
-        }
-      })
-      if(res.message) return res
-      return formatedUser
+      if(res) {
+        const formatedUser = formatUserInfo(res);
+        dispatch({
+          type: SET_USER_INFO,
+          payload: {
+            userInfo: formatedUser
+          }
+        })
+        if(res.message) return res
+        return formatedUser
+      }
     });
 }

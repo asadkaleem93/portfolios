@@ -81,7 +81,7 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
           email: "",
           password: "",
         }}
-        validationSchema={updateCardValidationSchema}
+        // validationSchema={updateCardValidationSchema}
         onSubmit={(values: PortfolioCardType) => {
           updatePortfolioCard({ data: values, dispatch: dispatcher });
         }}

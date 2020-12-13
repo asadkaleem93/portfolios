@@ -80,10 +80,12 @@ export const SignIn = () => {
         data.append("interest", values.interests);
         data.append("describe_your_self", values.describeYourSelf);
         createUser(data, dispatcher).then((res: any) => {
-          if (res.message && res.message === "User name already exists") setFieldError("userName", res.message);
-          else if (res.message && res.message === "Email already exists") setFieldError("email", res.message);
+          if (res) {
+            if (res.message && res.message === "User name already exists") setFieldError("userName", res.message);
+            else if (res.message && res.message === "Email already exists") setFieldError("email", res.message);
 
-          if (!res.message) history.push(`/portfolio/${values.userName}`);
+            if (!res.message) history.push(`/portfolio/${values.userName}`);
+          }
         });
       }}
     >

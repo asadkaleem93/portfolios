@@ -63,7 +63,6 @@ export const Sidebar = (props: { userName: string }) => {
   const { phoneNumber, email, degree, university, gpaScore, skills, interest } = userInfo;
   const formatedSkills = skills ? skills.split(",") : [];
   const formatedInterests = interest ? interest.split(",") : [];
-
   return (
     <>
       <div className="portfoliosSideBar">
@@ -86,28 +85,8 @@ export const Sidebar = (props: { userName: string }) => {
         initialValues={createInitalValues(userInfo)}
         validationSchema={updateUserDataFormValidatioSchema}
         enableReinitialize
-        onSubmit={(values: FormFieldsType, meta: any) => {
-          console.log("VALUES -->", values);
+        onSubmit={(values: FormFieldsType) => {
           updateUserInfo({ data: { ...values, userName: userName }, dispatch: dispatcher });
-          // const { setFieldError } = meta;
-          // const data = new FormData();
-          // data.append("file", values.resumeLink);
-          // data.append("email", values.email);
-          // data.append("password", values.password);
-          // data.append("user_name", values.userName);
-          // data.append("phone_number", values.phoneNumber);
-          // data.append("degree", values.degree);
-          // data.append("university", values.university);
-          // data.append("score", values.gpa);
-          // data.append("skills", values.skills);
-          // data.append("gender", values.gender);
-          // data.append("interest", values.interests);
-          // data.append("describe_your_self", values.describeYourSelf);
-          // createUser(data, dispatcher).then((res: any) => {
-          //   if (res.message && res.message === "User name already exists") setFieldError("userName", res.message);
-          //   else if (res.message && res.message === "Email already exists") setFieldError("email", res.message);
-          //   // if (!res.message) history.push(`/portfolio/${values.userName}`);
-          // });
         }}
       >
         {({ setFieldValue, handleSubmit, values }: FormikProps<FormFieldsType>) => {
@@ -118,7 +97,6 @@ export const Sidebar = (props: { userName: string }) => {
               onOk={() => setState({ ...state, modalVisibility: false })}
               onCancel={() => {
                 setState({ ...state, modalVisibility: !modalVisibility });
-                // resetForm();
               }}
             >
               <div className="signInForm">
@@ -146,6 +124,11 @@ export const Sidebar = (props: { userName: string }) => {
                     resumeName={values.resumeName}
                   />
                 </div>
+                {userInfo.resume && userInfo.resume.length && (
+                  <a href={`http://localhost:3001${userInfo.resume}`} download>
+                    Download Resume
+                  </a>
+                )}
                 <EmailPasswordFields />
                 <PrimaryButton onClick={() => handleSubmit()} label="Submit Form" />
               </div>
