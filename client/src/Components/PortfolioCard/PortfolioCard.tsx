@@ -81,7 +81,7 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
           email: "",
           password: "",
         }}
-        // validationSchema={updateCardValidationSchema}
+        validationSchema={updateCardValidationSchema}
         onSubmit={(values: PortfolioCardType) => {
           updatePortfolioCard({ data: values, dispatch: dispatcher });
         }}
@@ -91,11 +91,12 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
             <Modal
               title="Edit Card"
               visible={modalVisibility}
-              onOk={() => setState({ ...state, modalVisibility: false })}
+              // onOk={() => setState({ ...state, modalVisibility: false })}
               onCancel={() => {
                 setState({ ...state, modalVisibility: !modalVisibility });
                 resetForm();
               }}
+              footer={[]}
             >
               <FormikInputField name="name" placeHolder="Title" />
               <FormikInputField name="description" placeHolder="Description" />

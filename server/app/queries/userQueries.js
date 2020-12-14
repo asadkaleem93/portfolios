@@ -19,7 +19,6 @@ const verifyUser = (user) => {
       else return "Credentials does not match the navigation user name";
     })
     .catch((err) => {
-      console.log("err", err);
       return "Credentials Mis matched";
     });
 };
@@ -53,11 +52,11 @@ router.post("/getCompleteInfo", async (apiRequest, apiResponse) => {
 });
 
 router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => {
-  let updatedData = { ...apiRequest.body };
+  let updatedData = { ...apiRequest.body.data };
   let query;
   const searchUserName = "SELECT * FROM user_info WHERE user_name = ${user_name}";
   const searchEmail = "SELECT * FROM user_info WHERE email = ${email}";
-  const requiredFields = helpers.findEmptyValues(updatedData, ["email", "password", "phone_number", "describe_your_self", "user_name"]);
+  const requiredFields = helpers.findEmptyValues(updatedData, ["email", "password", "phoneNumber", "describeYourSelf", "userName"]);
   if (requiredFields.length) {
     apiResponse.send({
       error: `${requiredFields} are required fields`,
@@ -86,17 +85,17 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
           })
           .catch(() => {
             // Enter Data to user_info table with resume
-            helpers.cryptPassword(apiRequest.body.password, (_, hash) => {
+            helpers.cryptPassword(apiRequest.body.data.password, (_, hash) => {
               if (apiRequest.files.file) {
-                const { user_name } = apiRequest.body;
+                const { user_name } = apiRequest.body.data;
                 const fileName = apiRequest.files.file.name;
                 fs.readFile(apiRequest.files.file.path, function (err, data) {
                   const path = `/uploads/resumes/${user_name}-${fileName}`;
                   const savingPath = `${__dirname}${path}`;
                   const newPath = `/attachements/getResume?q=${path}`;
-                  updatedData = { resume: newPath, ...apiRequest.body, password: hash };
+                  updatedData = { resume: newPath, ...apiRequest.body.data, password: hash };
                   query =
-                    "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, resume, password, gender, describe_your_self, skills, interest) VALUES (${email}, ${user_name}, ${phone_number}, ${degree}, ${university}, ${score}, ${resume}, ${password}, ${gender}, ${describe_your_self}, ${skills}, ${interest}) returning ${email};";
+                    "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, resume, password, gender, describe_your_self, skills, interest) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${resume}, ${password}, ${gender}, ${describeYourSelf:}, ${skills}, ${interests}) returning ${email};";
                   dbConnection
                     .one(query, updatedData)
                     .then((res) => {
@@ -114,16 +113,16 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
               }
               // Enter Data to user_info table without resume
               else {
-                delete apiRequest.body.file;
-                delete apiRequest.body.password;
-                updatedData = { ...apiRequest.body, password: hash };
+                delete apiRequest.body.data.file;
+                delete apiRequest.body.data.password;
+                updatedData = { ...apiRequest.body.data, password: hash };
                 query =
-                  "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, password, gender, describe_your_self, skills, interest ) VALUES (${email}, ${user_name}, ${phone_number}, ${degree}, ${university}, ${score}, ${password}, ${gender}, ${describe_your_self}, ${skills}, ${interest}) returning ${email};";
+                  "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, password, gender, describe_your_self, skills, interest ) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}) returning ${email};";
                 dbConnection
                   .one(query, updatedData)
                   .then((res) => {
                     apiResponse.send({
-                      data: { resume: null, ...apiRequest.body },
+                      data: { resume: null, ...apiRequest.body.data },
                     });
                   })
                   .catch((err) => {
@@ -154,10 +153,10 @@ router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse
           error: "Credentials Mismatched, Please enter correct credentials",
         });
       } else {
-        const salt = await bcrypt.genSalt(10);
+        const salt = await helpers.findEncryptionSalt();
         let hashPassword = "";
         let query = "";
-        if (data.newPassword.length) hashPassword = await bcrypt.hash(data.newPassword, salt);
+        if (data.newPassword.length) hashPassword = await helpers.findHash(data.newPassword, salt);
         if (newResume) {
           const fileName = newResume.name || "";
           const path = `/uploads/resumes/${userName}-${fileName}`;

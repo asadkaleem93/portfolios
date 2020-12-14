@@ -78,64 +78,67 @@ export const Sidebar = (props: { userName: string }) => {
         {degree && <Credential label="Degree" value={degree} />}
         {university && <Credential label="University" value={university} />}
         {gpaScore && <Credential label="GPA" value={gpaScore} />}
-        {formatedSkills.length && <Credential label="Skills" value={<TagSection tags={formatedSkills} />} />}
-        {formatedInterests.length && <Credential label="Interest" value={<TagSection tags={formatedInterests} />} />}
+        {formatedSkills.length ? <Credential label="Skills" value={<TagSection tags={formatedSkills} />} /> : <></>}
+        {formatedInterests.length ? <Credential label="Interest" value={<TagSection tags={formatedInterests} />} /> : <></>}
       </div>
-      <Formik
-        initialValues={createInitalValues(userInfo)}
-        validationSchema={updateUserDataFormValidatioSchema}
-        enableReinitialize
-        onSubmit={(values: FormFieldsType) => {
-          updateUserInfo({ data: { ...values, userName: userName }, dispatch: dispatcher });
-        }}
-      >
-        {({ setFieldValue, handleSubmit, values }: FormikProps<FormFieldsType>) => {
-          return (
-            <Modal
-              title="Edit user info"
-              visible={modalVisibility}
-              onOk={() => setState({ ...state, modalVisibility: false })}
-              onCancel={() => {
-                setState({ ...state, modalVisibility: !modalVisibility });
-              }}
-            >
-              <div className="signInForm">
-                <FormikInputField name="newPassword" placeHolder="Enter new Password" />
-                <FormikInputField name="confirmPassword" placeHolder="Re enter new password" />
-                <FormikInputField name="phoneNumber" placeHolder="Phone number" />
-                <FormikInputField name="degree" placeHolder="Enter Degree" />
-                <FormikInputField name="university" placeHolder="Enter University" />
-                <FormikInputField name="gpa" placeHolder="Enter Score" />
-                <FormikInputField name="skills" placeHolder="Enter coma separated skills" />
-                <FormikInputField name="interests" placeHolder="Enter coma separated interests" />
-                <FormikTextAreaField name="describeYourSelf" placeHolder="Describe Your Self" />
-                <div className="fileUploader">
-                  <FileUploader
-                    onUpload={(file: any) => {
-                      setFieldValue("newResume", file);
-                      setFieldValue("resumeName", file.name);
-                      setFieldValue("resumeLink", "");
-                    }}
-                    onDeleteFile={() => {
-                      setFieldValue("newResume", null);
-                      setFieldValue("resumeLink", "");
-                      setFieldValue("resumeName", "");
-                    }}
-                    resumeName={values.resumeName}
-                  />
+      {modalVisibility && (
+        <Formik
+          initialValues={createInitalValues(userInfo)}
+          validationSchema={updateUserDataFormValidatioSchema}
+          enableReinitialize
+          onSubmit={(values: FormFieldsType) => {
+            updateUserInfo({ data: { ...values, userName: userName }, dispatch: dispatcher });
+          }}
+        >
+          {({ setFieldValue, handleSubmit, values }: FormikProps<FormFieldsType>) => {
+            return (
+              <Modal
+                title="Edit user info"
+                visible={modalVisibility}
+                // onOk={() => setState({ ...state, modalVisibility: false })}
+                onCancel={() => {
+                  setState({ ...state, modalVisibility: !modalVisibility });
+                }}
+                footer={[]}
+              >
+                <div className="signInForm">
+                  <FormikInputField name="newPassword" placeHolder="Enter new Password" password />
+                  <FormikInputField name="confirmPassword" placeHolder="Re enter new password" password />
+                  <FormikInputField name="phoneNumber" placeHolder="Phone number" />
+                  <FormikInputField name="degree" placeHolder="Enter Degree" />
+                  <FormikInputField name="university" placeHolder="Enter University" />
+                  <FormikInputField name="gpa" placeHolder="Enter Score" />
+                  <FormikInputField name="skills" placeHolder="Enter coma separated skills" />
+                  <FormikInputField name="interests" placeHolder="Enter coma separated interests" />
+                  <FormikTextAreaField name="describeYourSelf" placeHolder="Describe Your Self" />
+                  <div className="fileUploaderResume">
+                    <FileUploader
+                      onUpload={(file: any) => {
+                        setFieldValue("newResume", file);
+                        setFieldValue("resumeName", file.name);
+                        setFieldValue("resumeLink", "");
+                      }}
+                      onDeleteFile={() => {
+                        setFieldValue("newResume", null);
+                        setFieldValue("resumeLink", "");
+                        setFieldValue("resumeName", "");
+                      }}
+                      resumeName={values.resumeName}
+                    />
+                    {userInfo.resume && userInfo.resume.length && (
+                      <a className="downloadAnchor" href={`http://localhost:3001${userInfo.resume}`} download>
+                        Download Resume
+                      </a>
+                    )}
+                  </div>
+                  <EmailPasswordFields />
+                  <PrimaryButton onClick={() => handleSubmit()} label="Submit Form" />
                 </div>
-                {userInfo.resume && userInfo.resume.length && (
-                  <a href={`http://localhost:3001${userInfo.resume}`} download>
-                    Download Resume
-                  </a>
-                )}
-                <EmailPasswordFields />
-                <PrimaryButton onClick={() => handleSubmit()} label="Submit Form" />
-              </div>
-            </Modal>
-          );
-        }}
-      </Formik>
+              </Modal>
+            );
+          }}
+        </Formik>
+      )}
     </>
   );
 };

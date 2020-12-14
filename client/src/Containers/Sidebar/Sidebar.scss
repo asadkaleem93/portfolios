@@ -9,6 +9,14 @@
   overflow-y: auto;
 }
 
-.fileUploader {
+.fileUploaderResume {
   margin-top: $appPadding;
+  display: flex;
+  .downloadAnchor {
+    align-self: center;
+    padding-left: $appPadding;
+    color: $appColor;
+    font-size: 14px;
+    text-decoration: underline;
+  }
 }

@@ -11,6 +11,7 @@ import { addCardValidationSchema } from "./metadata";
 import { useAppContext } from "../../Components/Contexts/AppContext";
 import { setPortfolioCards } from "../../Actions/portfoliosAction";
 import { jsonToFormData } from "../../Utils/helpers";
+import { SearchBar } from "../../Components/SearchBar/SearchBar";
 
 type PortfoliosContentHeaderType = {
   onCardSearch: (searchedString: string) => void;
@@ -36,7 +37,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
       <Button type="primary" style={{ marginRight: "15px" }} onClick={() => setState({ ...state, modalVisibility: true })}>
         Add Cards
       </Button>
-      <Search placeholder="Search you target" allowClear onSearch={onCardSearch} style={{ width: 200 }} />
+      <SearchBar placeHolder="Search you target" onCardSearch={onCardSearch} />
       <Formik
         initialValues={{
           cards: [{ name: "", description: "", url: "", image: null }],
@@ -63,11 +64,12 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
             <Modal
               title="Add Cards"
               visible={modalVisibility}
-              onOk={() => setState({ ...state, modalVisibility: false })}
+              // onOk={() => setState({ ...state, modalVisibility: false })}
               onCancel={() => {
                 setState({ ...state, modalVisibility: !modalVisibility });
                 resetForm();
               }}
+              footer={[]}
             >
               <FieldArray
                 name="cards"

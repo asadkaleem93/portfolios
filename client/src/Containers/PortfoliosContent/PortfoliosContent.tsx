@@ -30,12 +30,15 @@ export const PortfoliosContent = (props: { userName: string }) => {
         <PortfoliosContentHeader onCardSearch={onCardSearch} userName={userName} />
       </div>
       <div className="cards">
-        {updatedCards.map((card: PortfolioCardType) => (
-          // ADD LINK CHECK
-          <a href={card.url} target="_blank">
+        {updatedCards.map((card: PortfolioCardType) =>
+          card.url.length ? (
+            <a href={card.url} target="_blank">
+              <PortfolioCard card={card} dispatcher={dispatcher} />
+            </a>
+          ) : (
             <PortfolioCard card={card} dispatcher={dispatcher} />
-          </a>
-        ))}
+          ),
+        )}
       </div>
     </div>
   );

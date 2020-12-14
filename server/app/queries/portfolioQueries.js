@@ -19,7 +19,6 @@ const verifyUser = (user) => {
       else return "Credentials does not match the navigation user name";
     })
     .catch((err) => {
-      console.log("err", err);
       return "Credentials Mis matched";
     });
 };

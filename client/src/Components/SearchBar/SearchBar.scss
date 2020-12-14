@@ -1,0 +1,20 @@
+@import "../../Assets/Scss/Required.scss";
+
+.ant-input-search {
+  &.ant-input-affix-wrapper {
+    &:hover {
+      .ant-input {
+        &:not(.ant-input-disabled) {
+          border-color: $appColor;
+        }
+      }
+    }
+  }
+  .ant-input {
+    &:focus,
+    &:hover {
+      border-color: $appColor;
+      box-shadow: $appColorFieldShadow;
+    }
+  }
+}

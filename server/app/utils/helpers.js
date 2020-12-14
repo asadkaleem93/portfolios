@@ -22,4 +22,12 @@ module.exports = {
     }, []);
     return requiredFields.join(", ");
   },
+  findEncryptionSalt: async () => {
+    const salt = await bcrypt.genSalt(10);
+    return salt;
+  },
+  findHash: async (data, salt) => {
+    const hash = await bcrypt.hash(data, salt);
+    return hash;
+  },
 };

@@ -24,7 +24,6 @@ const verifyUser = (user) => {
       else return "Credentials does not match the navigation user name";
     })
     .catch((err) => {
-      console.log("err", err);
       return "Credentials Mis matched";
     });
 };
@@ -144,7 +143,6 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
 });
 
 router.get("/getResume", (req, res) => {
-  // console.log("req.query.q -->", __dirname);
   const file = `${__dirname}${req.query.q}`;
   res.download(file);
   // fs.readFile(`${__dirname}${req.query.q}`, { encoding: "utf-8" }, function (err, content) {
@@ -350,10 +348,10 @@ router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse
           error: "Credentials Mismatched, Please enter correct credentials",
         });
       } else {
-        const salt = await bcrypt.genSalt(10);
+        const salt = await helpers.findEncryptionSalt();
         let hashPassword = "";
         let query = "";
-        if (data.newPassword.length) hashPassword = await bcrypt.hash(data.newPassword, salt);
+        if (data.newPassword.length) hashPassword = await helpers.findHash(data.newPassword, salt);
         if (newResume) {
           const fileName = newResume.name || "";
           const path = `/uploads/resumes/${userName}-${fileName}`;

@@ -66,21 +66,7 @@ export const SignIn = () => {
       validationSchema={signInFormValidatioSchema}
       onSubmit={(values: FormFieldsType, meta: any) => {
         const { setFieldError } = meta;
-        const data = new FormData();
-        // TODO: convert it from reuseable function
-        data.append("file", values.resume);
-        data.append("email", values.email);
-        data.append("password", values.password);
-        data.append("user_name", values.userName);
-        data.append("phone_number", values.phoneNumber);
-        data.append("degree", values.degree);
-        data.append("university", values.university);
-        data.append("score", values.gpa);
-        data.append("skills", values.skills);
-        data.append("gender", values.gender);
-        data.append("interest", values.interests);
-        data.append("describe_your_self", values.describeYourSelf);
-        createUser(data, dispatcher).then((res: any) => {
+        createUser(values, dispatcher).then((res: any) => {
           if (res) {
             if (res.message && res.message === "User name already exists") setFieldError("userName", res.message);
             else if (res.message && res.message === "Email already exists") setFieldError("email", res.message);
