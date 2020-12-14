@@ -1,42 +1,169 @@
 // lib
-const { GraphQLObjectType, GraphQLList, GraphQLString } = require('graphql');
+const express = require("express");
+const router = express.Router();
+const dbConnection = require("../connection.js");
+const multipart = require("connect-multiparty");
+const bcrypt = require("bcrypt");
+const fs = require("fs");
+const multipartMiddleware = multipart();
 
-// src
-const { portfoliosType, blogsType } = require('./types/types.js');
-const dbConnection = require('../connection.js');
+const helpers = require("../utils/helpers.js");
 
-const portfolioQueries = new GraphQLObjectType({
-  name: 'Query',
-  fields: {
-    portfolioOwners: {
-      type: new GraphQLList(portfoliosType),
-      resolve: async function(source, args) {
-        let response = [];
-        const query = 'select * from portfolios_owners';
-        await dbConnection
-          .result(query)
-          .then(user => {
-            response = [...user.rows];
+const verifyUser = (user) => {
+  const searchEmail = "SELECT * FROM user_info WHERE email = ${email}";
+  return dbConnection
+    .one(searchEmail, user)
+    .then(async (res) => {
+      const match = await bcrypt.compare(user.password, res.password);
+      if (res.user_name === user.user_name && match) return res.user_name;
+      else return "Credentials does not match the navigation user name";
+    })
+    .catch((err) => {
+      console.log("err", err);
+      return "Credentials Mis matched";
+    });
+};
+
+router.post("/setPortfolioCards", multipartMiddleware, (apiRequest, apiResponse) => {
+  const { data } = apiRequest.body;
+  const { data: cardsData = {} } = apiRequest.files;
+  const { cards: imageCards = [] } = cardsData;
+  const { userInfo, cards } = data;
+  const requiredFields = cards.map((card) => helpers.findEmptyValues(card, ["name", "description"]));
+  if (requiredFields.join("").length) {
+    apiResponse.send({
+      error: `name, description of one or many cards are missing are required fields`,
+    });
+  } else {
+    verifyUser(userInfo).then(async (userName) => {
+      if (userName === "Credentials Mis matched" || userName === "Credentials does not match the navigation user name") {
+        apiResponse.send({
+          error: "Credentials Mismatched, Please enter correct credentials",
+        });
+      } else {
+        dbConnection
+          .task(async (t) => {
+            const itemDetails = cards.map(async (card, index) => {
+              const image = imageCards.find((imageCard) => imageCard.image.fieldName.includes(`[${index}]`));
+              let updatedData;
+              if (!image) {
+                updatedData = {
+                  img_link: "",
+                  user_name: userName,
+                  ...card,
+                };
+              } else {
+                const path = `/uploads/images/${userName}-${card.name}-${image.image.originalFilename}`;
+                const savingPath = `${__dirname}${path}`;
+                const newPath = `/attachements/getImage?q=${path}`;
+                updatedData = {
+                  img_link: newPath,
+                  user_name: userName,
+                  ...card,
+                };
+                fs.readFile(image.image.path, function (err, data) {
+                  fs.writeFile(savingPath, data, function (err) {});
+                });
+              }
+              const query = await t.one("INSERT INTO portfolio_info (name, description, url, img_link, user_name) VALUES (${name}, ${description}, ${url}, ${img_link}, ${user_name}) returning id, img_link;", updatedData);
+              updatedData = {};
+              return { query };
+            });
+
+            const details = await t.batch(itemDetails);
+
+            return { details };
           })
-          .catch(error => error);
-        return response;
-      }
-    },
-    blogs: {
-      type: new GraphQLList(blogsType),
-      resolve: async function(source, args) {
-        let response = [];
-        const query = 'SELECT * FROM blogs';
-        await dbConnection
-          .result(query)
-          .then(res => {
-            response = [...res.rows];
+          .then((events, index) => {
+            const updatedResp = events.details.map((event, index) => {
+              const { image, ...rest } = cards[index];
+              return {
+                ...event.query,
+                ...rest,
+                user_name: userName,
+              };
+            });
+            apiResponse.send({
+              data: updatedResp,
+            });
           })
-          .catch(err => console.error('ERROR -->', err));
-        return response;
+          .catch((err) => {
+            apiResponse.send({
+              error: err,
+            });
+          });
       }
-    }
+    });
   }
 });
 
-exports.portfolioQueries = portfolioQueries;
+router.delete("/deletePortfolioCard", (apiRequest, apiResponse) => {
+  const query = "DELETE FROM portfolio_info WHERE id = ${id} AND user_name = ${userName} RETURNING *;";
+  dbConnection
+    .one(query, apiRequest.body)
+    .then((res) => {
+      apiResponse.send({
+        data: "Row deleted successfully",
+      });
+    })
+    .catch((err) => {
+      apiResponse.send({
+        error: err,
+      });
+    });
+});
+
+router.post("/updatePortfolioCard", multipartMiddleware, (apiRequest, apiResponse) => {
+  const { data } = apiRequest.body;
+  const { data: imageData = {} } = apiRequest.files;
+  const { image } = imageData;
+  const requiredFields = helpers.findEmptyValues(data, ["email", "password", "name", "description", "userName"]);
+  if (requiredFields.length) {
+    apiResponse.send({
+      error: `${requiredFields} are required fields`,
+    });
+  } else {
+    verifyUser({ email: data.email, password: data.password, user_name: data.userName }).then((userName) => {
+      if (userName === "Credentials Mis matched" || userName === "Credentials does not match the navigation user name") {
+        apiResponse.send({
+          error: "Credentials Mismatched, Please enter correct credentials",
+        });
+      } else {
+        let updatedData;
+        let query;
+        if (image) {
+          const path = `/uploads/images/${userName}-${data.name}-${image.originalFilename}`;
+          const savingPath = `${__dirname}${path}`;
+          const newPath = `/attachements/getImage?q=${path}`;
+
+          updatedData = {
+            ...data,
+            img_link: newPath,
+          };
+          fs.readFile(image.path, function (err, data) {
+            fs.writeFile(savingPath, data, function (err) {});
+          });
+          query = "UPDATE portfolio_info SET name = ${name}, description = ${description}, url = ${url}, img_link = ${img_link} WHERE user_name = ${userName} AND id = ${id} RETURNING *;";
+        } else {
+          query = "UPDATE portfolio_info SET name = ${name}, description = ${description}, url = ${url}, img_link = ${imgLink} WHERE user_name = ${userName} AND id = ${id} RETURNING *;";
+          updatedData = { ...data };
+        }
+
+        dbConnection
+          .one(query, updatedData)
+          .then((res) => {
+            apiResponse.send({
+              data: res,
+            });
+          })
+          .catch((err) => {
+            apiResponse.send({
+              error: err,
+            });
+          });
+      }
+    });
+  }
+});
+
+module.exports = router;

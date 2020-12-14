@@ -3,7 +3,7 @@ import {SET_USER_INFO} from '../Components/Contexts/AppContext';
 import { formatUserInfo } from "../Transformers/UsersTransformers";
 
 export const createUser =  (payload: any, dispatch: any) => {
-    return apiCall({url: "setUser", payload, 
+    return apiCall({url: "user/setUser", payload, 
       headers: {
         headers: {
           "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s"

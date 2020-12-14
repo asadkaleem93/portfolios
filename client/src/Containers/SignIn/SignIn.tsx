@@ -67,6 +67,7 @@ export const SignIn = () => {
       onSubmit={(values: FormFieldsType, meta: any) => {
         const { setFieldError } = meta;
         const data = new FormData();
+        // TODO: convert it from reuseable function
         data.append("file", values.resume);
         data.append("email", values.email);
         data.append("password", values.password);

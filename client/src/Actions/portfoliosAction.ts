@@ -9,7 +9,7 @@ export const getCompleteUserInfo = (props: {
   dispatch: any;
 }) => {
   const {userName, dispatch} = props;
-  return apiCall({url: "getCompleteInfo", payload: {
+  return apiCall({url: "user/getCompleteInfo", payload: {
     user_name: userName,
   }}).then((res: any) => {
     const formatedUser = formatUserInfo(res.user_info);
@@ -29,7 +29,7 @@ export const setPortfolioCards = (props: {
   dispatch: any;
 }) => {
   const {data, dispatch} = props;
-  return apiCall({url: "setPortfolioCards", payload: data}).then((res) => {
+  return apiCall({url: "portfolios/setPortfolioCards", payload: data}).then((res) => {
     if(res) {
       const formatedPortfolios = formatPortfolios(res);
         dispatch({
@@ -45,7 +45,7 @@ export const deletePortfolioCard = (props: {
   dispatch: any;
 }) => {
   const {data, dispatch} = props;
-  return apiCall({url: "deletePortfolioCard", payload: data, apiType: "delete"}).then((res) => {
+  return apiCall({url: "portfolios/deletePortfolioCard", payload: data, apiType: "delete"}).then((res) => {
     if(res) {
         dispatch({
         type: DELETE_PORTFOLIO_CARD,
@@ -61,7 +61,7 @@ export const updatePortfolioCard = (props: {
 }) => {
   const {data, dispatch} = props;
   const formData = jsonToFormData(data);
-  return apiCall({url: "updatePortfolioCard", payload: formData}).then((res) => {
+  return apiCall({url: "portfolios/updatePortfolioCard", payload: formData}).then((res) => {
     if(res) {
       const formatedPortfolioCard = formatPortfolio(res)
         dispatch({
@@ -78,8 +78,7 @@ export const updateUserInfo = (props: {
 }) => {
   const {data, dispatch} = props;
   const formData = jsonToFormData(data);
-  return apiCall({url: "updateUserInfoCard", payload: formData}).then((res) => {
-    console.log('RES -->', res)
+  return apiCall({url: "user/updateUserInfoCard", payload: formData}).then((res) => {
     if(res) {
       const formatedUserInfo = formatUserInfo(res)
         dispatch({
