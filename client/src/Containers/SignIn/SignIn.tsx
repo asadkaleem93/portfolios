@@ -26,6 +26,7 @@ type FormFieldsType = {
   gender: string;
   describeYourSelf: string;
   resume?: any;
+  // displayImage?: any;
 };
 
 const initialValues = {
@@ -42,6 +43,7 @@ const initialValues = {
   interests: "",
   describeYourSelf: "",
   resume: null,
+  // displayImage: null,
 };
 
 export const SignIn = () => {
@@ -82,34 +84,45 @@ export const SignIn = () => {
             <div className="sectionContainer">
               <AppHeading text="Sign In" />
               <div className="fieldRow">
-                <FormikInputField name="email" placeHolder="Enter email" />
-                <FormikInputField name="phoneNumber" placeHolder="Enter Phone number" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="email" placeHolder="Enter email" fieldLabel="Email" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="phoneNumber" placeHolder="Enter Phone number" fieldLabel="Phone number" />
               </div>
 
               <div className="fieldRow">
-                <FormikInputField name="password" placeHolder="Enter password" password />
-                <FormikInputField name="confirmPassword" placeHolder="Confirm password" password />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="password" placeHolder="Enter password" password fieldLabel="Password" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="confirmPassword" placeHolder="Confirm password" password fieldLabel="Confirm password" />
               </div>
               <div className="fieldRow">
-                <FormikInputField name="userName" placeHolder="Username" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="userName" placeHolder="Username" fieldLabel="User name" />
                 <div className="radioGroup">
+                  <div> </div>
                   <span className="label">Select Gender</span>
                   <FormikRadioGroup fields={radioButtons} name={"gender"} />
                 </div>
+              </div>
+              <div className="fieldRow">
+                <FileUploader
+                  onUpload={(file: any) => {
+                    setFieldValue(`displayImage`, file);
+                  }}
+                  onDeleteFile={() => setFieldValue(`displayImage`, null)}
+                  fileType="img"
+                  buttonText="Upload Profile Picture"
+                />
               </div>
             </div>
             <div className="sectionContainer">
               <AppHeading text="Portfolio Info" />
               <div className="fieldRow">
-                <FormikInputField name="degree" placeHolder="Enter Degree" />
-                <FormikInputField name="university" placeHolder="Enter University" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="degree" placeHolder="Enter Degree" fieldLabel="Degree" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="university" placeHolder="Enter University" fieldLabel="University" />
               </div>
               <div className="fieldRow">
-                <FormikInputField name="gpa" placeHolder="Enter Score" />
-                <FormikInputField name="skills" placeHolder="Enter coma separated skills" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="gpa" placeHolder="Enter Score" fieldLabel="Score" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="skills" placeHolder="Enter coma separated skills" fieldLabel="Skills" />
               </div>
               <div className="fieldRow">
-                <FormikInputField name="interests" placeHolder="Enter coma separated interests" />
+                <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="interests" placeHolder="Enter coma separated interests" fieldLabel="Interests" />
                 <div className="fileUploader">
                   <FileUploader
                     onUpload={(file: any) => {

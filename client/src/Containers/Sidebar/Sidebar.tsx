@@ -11,8 +11,10 @@ import { FormikTextAreaField } from "../../Components/FormikTextArea/FormikTextA
 import { FileUploader } from "../../Components/FileUploader/FileUploader";
 import { EmailPasswordFields } from "../../Components/EmailPasswordFields/EmailPasswordFields";
 import { updateUserDataFormValidatioSchema } from "./metaData";
+import { updateUserInfo } from "../../Actions/usersActions";
+import { DisplayImage } from "../../Components/DisplayImage/DisplayImage";
+
 import "./Sidebar.scss";
-import { updateUserInfo } from "../../Actions/portfoliosAction";
 
 type FormFieldsType = {
   password: string;
@@ -29,6 +31,8 @@ type FormFieldsType = {
   resumeLink: string;
   resumeName: string;
   newResume: any;
+  newDisplayImage: any;
+  displayImage: string;
 };
 
 const createInitalValues = (userInfo) => {
@@ -42,6 +46,8 @@ const createInitalValues = (userInfo) => {
     newResume: null,
     resumeLink: userInfo.resume,
     resumeName: resumeName,
+    newDisplayImage: null,
+    displayImage: userInfo.displayImage,
     phoneNumber: userInfo.phoneNumber,
     degree: userInfo.degree,
     university: userInfo.university,
@@ -60,12 +66,13 @@ export const Sidebar = (props: { userName: string }) => {
   });
   const { modalVisibility } = state;
   const { userInfo } = appState;
-  const { phoneNumber, email, degree, university, gpaScore, skills, interest } = userInfo;
+  const { phoneNumber, email, degree, university, gpaScore, skills, interest, displayImage = "" } = userInfo;
   const formatedSkills = skills ? skills.split(",") : [];
   const formatedInterests = interest ? interest.split(",") : [];
   return (
     <>
       <div className="portfoliosSideBar">
+        <DisplayImage imgSrc={displayImage} />
         <PrimaryButton
           label="Update user info"
           onClick={() => {
@@ -87,7 +94,8 @@ export const Sidebar = (props: { userName: string }) => {
           validationSchema={updateUserDataFormValidatioSchema}
           enableReinitialize
           onSubmit={(values: FormFieldsType) => {
-            updateUserInfo({ data: { ...values, userName: userName }, dispatch: dispatcher });
+            const updateModalVisibility = () => setState({ modalVisibility: false });
+            updateUserInfo({ data: { ...values, userName: userName }, dispatch: dispatcher, updateModalVisibility });
           }}
         >
           {({ setFieldValue, handleSubmit, values }: FormikProps<FormFieldsType>) => {
@@ -101,15 +109,53 @@ export const Sidebar = (props: { userName: string }) => {
                 }}
                 footer={[]}
               >
-                <div className="signInForm">
-                  <FormikInputField name="newPassword" placeHolder="Enter new Password" password />
-                  <FormikInputField name="confirmPassword" placeHolder="Re enter new password" password />
-                  <FormikInputField name="phoneNumber" placeHolder="Phone number" />
-                  <FormikInputField name="degree" placeHolder="Enter Degree" />
-                  <FormikInputField name="university" placeHolder="Enter University" />
-                  <FormikInputField name="gpa" placeHolder="Enter Score" />
-                  <FormikInputField name="skills" placeHolder="Enter coma separated skills" />
-                  <FormikInputField name="interests" placeHolder="Enter coma separated interests" />
+                <div className="userUpdateForm">
+                  <DisplayImage imgSrc={values.displayImage} />
+                  <div className="controls">
+                    <label className="custom-file-upload">
+                      <input
+                        type="file"
+                        // key={file}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                          const file = e.target.files && e.target.files[0];
+                          const fileReader = new FileReader();
+                          if (file && file.type && file.type.includes("image")) {
+                            fileReader.readAsDataURL(file);
+                            fileReader.onload = async (event: any): Promise<any> => {
+                              if (file) {
+                                setFieldValue("displayImage", event.target.result);
+                              }
+                            };
+                            setFieldValue("newDisplayImage", file);
+                          }
+                        }}
+                        accept="image/*"
+                      />
+                      <span className="attach-text">
+                        <span className="imgControl">
+                          <strong>Upload Image</strong>
+                        </span>
+                      </span>
+                    </label>
+                    {values.displayImage && values.displayImage.length > 0 && (
+                      <span
+                        className="imgControl"
+                        onClick={() => {
+                          setFieldValue("displayImage", "");
+                        }}
+                      >
+                        <strong>Delete Image</strong>
+                      </span>
+                    )}
+                  </div>
+                  <FormikInputField name="newPassword" placeHolder="Enter new Password" password fieldLabel="Password" />
+                  <FormikInputField name="confirmPassword" placeHolder="Re enter new password" password fieldLabel="Confirm password" />
+                  <FormikInputField name="phoneNumber" placeHolder="Phone number" fieldLabel="Phone number" />
+                  <FormikInputField name="degree" placeHolder="Enter Degree" fieldLabel="Degree" />
+                  <FormikInputField name="university" placeHolder="Enter University" fieldLabel="University" />
+                  <FormikInputField name="gpa" placeHolder="Enter Score" fieldLabel="Score" />
+                  <FormikInputField name="skills" placeHolder="Enter coma separated skills" fieldLabel="Skills" />
+                  <FormikInputField name="interests" placeHolder="Enter coma separated interests" fieldLabel="Interests" />
                   <FormikTextAreaField name="describeYourSelf" placeHolder="Describe Your Self" />
                   <div className="fileUploaderResume">
                     <FileUploader

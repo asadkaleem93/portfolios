@@ -1,10 +1,12 @@
 @import "../../Assets//Scss/Constants.scss";
 
 .portfoliosDescription {
-  height: 25vh;
-  border: 1px solid $appColor;
+  height: 25%;
+  // border: 1px solid $appColor;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: $appPadding;
+  padding: $appPadding 3rem;
+  font-size: 1.2rem;
+  font-family: "Pacifico";
 }

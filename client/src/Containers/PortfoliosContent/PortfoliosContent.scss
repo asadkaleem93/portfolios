@@ -1,8 +1,9 @@
 @import "../../Assets//Scss/Constants.scss";
 
 .portfoliosContent {
-  width: 85%;
-  border: 1px solid $appColor;
+  width: 100%;
+  height: 75%;
+  // border: 1px solid $appColor;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

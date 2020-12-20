@@ -6,43 +6,33 @@ import { PortfoliosContent } from "../PortfoliosContent/PortfoliosContent";
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Loader } from "../../Components/Loader/Loader";
 import { useAppContext } from "../../Components/Contexts/AppContext";
-import { getCompleteUserInfo } from "../../Actions/portfoliosAction";
+import { getCompleteUserInfo } from "../../Actions/usersActions";
 import "./Portfolios.scss";
 
 export const Portfolios = () => {
   const { userName: navUserName = "" } = useParams<{ userName?: string }>();
-  const [state, setState] = React.useState<{
-    isLoading: boolean;
-    error: string;
-  }>({
-    isLoading: true,
-    error: "",
-  });
-
-  const { isLoading, error } = state;
-  const { state: appState, dispatcher } = useAppContext();
+  const { state, dispatcher } = useAppContext();
+  const { appLoader, portfolioCards, userInfo } = state;
   React.useEffect(() => {
-    if (navUserName) {
-      getCompleteUserInfo({
-        userName: navUserName,
-        dispatch: dispatcher,
-      });
-      setState({ ...state, isLoading: false });
-    } else {
-      setState({ ...state, isLoading: false, error: "No data for this user" });
-    }
+    getCompleteUserInfo({
+      userName: navUserName,
+      dispatch: dispatcher,
+    });
   }, [navUserName]);
 
-  if (isLoading) return <Loader />;
-  if (error.length > 0) return <div>{state.error}</div>;
+  // if (appLoader) return <Loader />;
+  if (Object.keys(userInfo).length === 0 && portfolioCards.length === 0) return null;
 
   return (
-    <div className="portfoliosContainer">
-      <Description />
-      <div className="portfoliosDetail">
+    <>
+      {appLoader && <Loader />}
+      <div className="portfoliosContainer">
         <Sidebar userName={navUserName} />
-        <PortfoliosContent userName={navUserName} />
+        <div className="portfoliosDetail">
+          <Description />
+          <PortfoliosContent userName={navUserName} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };

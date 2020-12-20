@@ -8,5 +8,9 @@ export const Description = () => {
   const { state } = useAppContext();
   const { userInfo } = state;
   const { describeYourSelf } = userInfo;
-  return <div className="portfoliosDescription">{describeYourSelf}</div>;
+  return (
+    <div className="portfoliosDescription" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/banner.png)` }}>
+      {describeYourSelf}
+    </div>
+  );
 };

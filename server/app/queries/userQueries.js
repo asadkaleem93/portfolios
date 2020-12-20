@@ -23,6 +23,17 @@ const verifyUser = (user) => {
     });
 };
 
+const uploadImg = (imgObj, userName) => {
+  const fileName = imgObj.name || "";
+  const path = `/uploads/profileImages/${userName}-${fileName}`;
+  const savingPath = `${__dirname}${path}`;
+  const newPath = `/attachements/getProfileResume?q=${path}`;
+  fs.readFile(imgObj.path, function (err, data) {
+    fs.writeFile(savingPath, data, function (err) {});
+  });
+  return newPath;
+};
+
 router.post("/getCompleteInfo", async (apiRequest, apiResponse) => {
   dbConnection
     .one("SELECT * FROM user_info WHERE user_name = ${user_name};", apiRequest.body)
@@ -45,14 +56,15 @@ router.post("/getCompleteInfo", async (apiRequest, apiResponse) => {
         });
     })
     .catch((err) => {
-      apiResponse.send({
-        error: "We cannot find any portfolio info for this user name",
-      });
+      apiResponse.status(404).send({ error: "We cannot find any portfolio info for this user name" });
     });
 });
 
 router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => {
   let updatedData = { ...apiRequest.body.data };
+  const { data: fileData = {} } = apiRequest.files;
+  const { resume, displayImage } = fileData;
+  const { userName } = apiRequest.body.data;
   let query;
   const searchUserName = "SELECT * FROM user_info WHERE user_name = ${user_name}";
   const searchEmail = "SELECT * FROM user_info WHERE email = ${email}";
@@ -86,16 +98,19 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
           .catch(() => {
             // Enter Data to user_info table with resume
             helpers.cryptPassword(apiRequest.body.data.password, (_, hash) => {
-              if (apiRequest.files.file) {
-                const { user_name } = apiRequest.body.data;
-                const fileName = apiRequest.files.file.name;
-                fs.readFile(apiRequest.files.file.path, function (err, data) {
-                  const path = `/uploads/resumes/${user_name}-${fileName}`;
+              if (resume) {
+                const fileName = resume.name;
+                fs.readFile(resume.path, function (err, data) {
+                  const path = `/uploads/resumes/${userName}-${fileName}`;
                   const savingPath = `${__dirname}${path}`;
                   const newPath = `/attachements/getResume?q=${path}`;
-                  updatedData = { resume: newPath, ...apiRequest.body.data, password: hash };
+                  updatedData = { resume: newPath, ...apiRequest.body.data, password: hash, displayImage: "" };
+                  if (displayImage) {
+                    const path = uploadImg(displayImage, userName);
+                    updatedData = { ...updatedData, displayImage: path };
+                  }
                   query =
-                    "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, resume, password, gender, describe_your_self, skills, interest) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${resume}, ${password}, ${gender}, ${describeYourSelf:}, ${skills}, ${interests}) returning ${email};";
+                    "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, resume, password, gender, describe_your_self, skills, interest, profile_image) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${resume}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}, ${displayImage}) returning ${email};";
                   dbConnection
                     .one(query, updatedData)
                     .then((res) => {
@@ -115,14 +130,18 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
               else {
                 delete apiRequest.body.data.file;
                 delete apiRequest.body.data.password;
-                updatedData = { ...apiRequest.body.data, password: hash };
+                updatedData = { ...apiRequest.body.data, password: hash, displayImage: "" };
+                if (displayImage) {
+                  const path = uploadImg(displayImage, userName);
+                  updatedData = { ...updatedData, displayImage: path };
+                }
                 query =
-                  "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, password, gender, describe_your_self, skills, interest ) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}) returning ${email};";
+                  "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, password, gender, describe_your_self, skills, interest, profile_image ) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}, ${displayImage}) returning ${email};";
                 dbConnection
                   .one(query, updatedData)
                   .then((res) => {
                     apiResponse.send({
-                      data: { resume: null, ...apiRequest.body.data },
+                      data: { resume: "", ...apiRequest.body.data, displayImage: "" },
                     });
                   })
                   .catch((err) => {
@@ -140,7 +159,7 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
 router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse) => {
   const { data } = apiRequest.body;
   const { data: fileData = {} } = apiRequest.files;
-  const { newResume } = fileData;
+  const { resume, newDisplayImage } = fileData;
   const requiredFields = helpers.findEmptyValues(data, ["email", "password", "phoneNumber", "describeYourSelf", "userName"]);
   if (requiredFields.length) {
     apiResponse.send({
@@ -157,30 +176,46 @@ router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse
         let hashPassword = "";
         let query = "";
         if (data.newPassword.length) hashPassword = await helpers.findHash(data.newPassword, salt);
-        if (newResume) {
-          const fileName = newResume.name || "";
+        // IF RESUME IS UPLOADED
+        if (resume) {
+          const fileName = resume.name || "";
           const path = `/uploads/resumes/${userName}-${fileName}`;
           const savingPath = `${__dirname}${path}`;
           const newPath = `/attachements/getResume?q=${path}`;
-          fs.readFile(newResume.path, function (err, data) {
-            fs.writeFile(savingPath, data, function (err) {});
-          });
+
           updatedData = {
             ...data,
             resume_link: newPath,
+            displayImage: data.displayImage,
             hashPassword,
           };
+
+          fs.readFile(resume.path, function (err, data) {
+            fs.writeFile(savingPath, data, function (err) {});
+          });
+
+          if (newDisplayImage) {
+            const path = uploadImg(newDisplayImage, userName);
+            updatedData = { ...updatedData, displayImage: path };
+          }
+
           query = updatedData.newPassword.length
-            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword} WHERE user_name = ${userName} RETURNING *;"
-            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}  WHERE user_name = ${userName} RETURNING *;";
+            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}  WHERE user_name = ${userName} RETURNING *;"
+            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}  WHERE user_name = ${userName} RETURNING *;";
         } else {
           updatedData = {
             ...data,
             hashPassword,
+            displayImage: data.displayImage,
           };
+
+          if (newDisplayImage) {
+            const path = uploadImg(newDisplayImage, userName);
+            updatedData = { ...updatedData, displayImage: path };
+          }
           query = updatedData.newPassword.length
-            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword} WHERE user_name = ${userName} RETURNING *;"
-            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}  WHERE user_name = ${userName} RETURNING *;";
+            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf} WHERE user_name = ${userName} RETURNING *;"
+            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf} WHERE user_name = ${userName} RETURNING *;";
         }
 
         dbConnection

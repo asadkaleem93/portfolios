@@ -1,59 +1,64 @@
 @import "../../Assets/Scss/Required.scss";
 
-.formikInputField {
-  margin-bottom: 1rem;
-  .ant-input {
+.fieldWrapper {
+  display: flex;
+  flex-direction: column;
+  // width: 47%;
+
+  > span {
+    margin-bottom: 3px;
+  }
+  .formikInputField {
+    margin-bottom: 1rem;
     border-radius: 0.3rem;
-    &.invalid {
-      border-color: $errorColor;
-      box-shadow: $errorColorFieldShadow;
-      &:focus,
-      &:hover {
+
+    .ant-input {
+      border-radius: 0.3rem;
+      &.invalid {
         border-color: $errorColor;
         box-shadow: $errorColorFieldShadow;
-      }
-    }
-    &:focus,
-    &:hover {
-      border-color: $appColor;
-      box-shadow: $appColorFieldShadow;
-    }
-    &::placeholder {
-      color: #d4d4d4;
-    }
-  }
-
-  .ant-input-password {
-    border-color: $appColor;
-    border-radius: 0.3rem;
-
-    &.ant-input-affix-wrapper:hover {
-      .ant-input {
-        &:not(.ant-input-disabled) {
-          border-color: $appColor;
-        }
-      }
-    }
-
-    &.invalid {
-      border-radius: 0.3rem;
-      .ant-input {
-        border-color: $errorColor !important;
-        box-shadow: $errorColorFieldShadow;
-        &:focus {
+        &:focus,
+        &:hover {
           border-color: $errorColor;
           box-shadow: $errorColorFieldShadow;
         }
-        &:hover {
-          border-color: $errorColor;
-        }
       }
       &:focus,
       &:hover {
-        border-color: $errorColor;
+        border-color: $appColor;
+        box-shadow: $appColorFieldShadow;
       }
       &::placeholder {
         color: #d4d4d4;
+      }
+    }
+
+    .ant-input-password {
+      border-radius: 0.3rem;
+
+      &.ant-input-affix-wrapper {
+        &.ant-input-affix-wrapper-focused {
+          border-color: $appColor;
+          box-shadow: $appColorFieldShadow;
+        }
+        &:hover {
+          border-color: $appColor;
+          box-shadow: $appColorFieldShadow;
+          .ant-input {
+            &:not(.ant-input-disabled) {
+              border-color: $appColor;
+            }
+            &:hover,
+            &:focus {
+              border-color: white;
+              box-shadow: unset;
+            }
+          }
+        }
+        &.invalid {
+          border-color: $errorColor !important;
+          box-shadow: $errorColorFieldShadow;
+        }
       }
     }
   }

@@ -23,5 +23,12 @@ export const apiCall = (props: {
             message: res.data.error,
           });
         }
-      });
+      }).catch((err) => {
+        if(err.response.status === 404) {
+          PushNotification({
+            message: err.response.data.error,
+          });
+        }
+        }
+      );
 }

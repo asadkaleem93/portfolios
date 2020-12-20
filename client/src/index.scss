@@ -1,3 +1,19 @@
+@import "./Assets/Scss/Required.scss";
+
+#root {
+  font-family: "Roboto", sans-serif;
+}
+
+.ant-modal-root {
+  font-family: "Roboto", sans-serif;
+}
+
+.modalSectionSeperator {
+  border-top: 1px solid $appColor;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .error-tooltip {
   box-shadow: 0 0 0 0 rgba(255, 101, 99, 0.27);
   .ant-tooltip-arrow::before {

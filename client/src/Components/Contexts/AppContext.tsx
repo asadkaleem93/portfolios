@@ -1,41 +1,45 @@
 import * as React from "react";
 
 import { PortfolioCardType, UserFieldsType } from "../../Utils/Types";
-import { PortfolioCard } from "../PortfolioCard/PortfolioCard";
 
 export const SET_PORTFOLIO_CARDS = "SET_PORTFOLIO_CARDS";
 export const DELETE_PORTFOLIO_CARD = "DELETE_PORTFOLIO_CARD";
 export const UPDATE_PORTFOLIO_CARD = "UPDATE_PORTFOLIO_CARD";
 export const SET_USER_INFO = "SET_USER_INFO";
 export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
+export const UPDATE_LOADER = "UPDATE_LOADER";
 
 type AppStateType = ({} & PortfolioCardType & UserFieldsType) | any;
 
 type AppContextType = {
   state: AppStateType;
   dispatcher: any;
+  appLoader: boolean;
 };
 
 const defaultAppState: AppStateType = {
   portfolioCards: [],
   userInfo: {},
+  appLoader: false,
 };
 
-const appContextReducer = (state, action) => {
+const appContextReducer = (state: AppStateType, action) => {
   switch (action.type) {
     case SET_USER_INFO:
       return { ...state, ...action.payload };
     case SET_PORTFOLIO_CARDS:
-      return { ...state, portfolioCards: [...state.portfolioCards, ...action.payload] };
+      return { ...state, portfolioCards: [...state.portfolioCards, ...action.payload.cards] };
     case DELETE_PORTFOLIO_CARD:
-      return { ...state, portfolioCards: state.portfolioCards.filter((card: PortfolioCardType) => card.id !== action.payload) };
+      return { ...state, portfolioCards: state.portfolioCards.filter((card: PortfolioCardType) => card.id !== action.payload.cardId) };
     case UPDATE_USER_INFO:
-      return { ...state, userInfo: action.payload };
+      return { ...state, userInfo: action.payload.updatedUser };
+    case UPDATE_LOADER:
+      return { ...state, appLoader: action.payload };
     case UPDATE_PORTFOLIO_CARD:
       return {
         ...state,
         portfolioCards: state.portfolioCards.map((card: PortfolioCardType) => {
-          if (card.id === action.payload.id) return action.payload;
+          if (card.id === action.payload.updatedCard.id) return action.payload.updatedCard;
           else return card;
         }),
       };

@@ -12,20 +12,19 @@ type AddCardModalType = {
 export const AddCardModal = (props: AddCardModalType) => {
   const { setFieldValue, index } = props;
   return (
-    <>
-      <div className="sectionContainer">
-        <FormikInputField name={`cards[${index}].name`} placeHolder="Card Name" />
-        <FormikInputField name={`cards[${index}].description`} placeHolder="Card Description" />
-        <FormikInputField name={`cards[${index}].url`} placeHolder="Card Link" />
+    <div className="sectionContainer">
+      <FormikInputField name={`cards[${index}].name`} placeHolder="Card Name" fieldLabel="Name" />
+      <FormikInputField name={`cards[${index}].description`} placeHolder="Card Description" fieldLabel="Description" />
+      <FormikInputField name={`cards[${index}].url`} placeHolder="Card Link" fieldLabel="External Link" />
 
-        <FileUploader
-          onUpload={(file: any) => {
-            setFieldValue(`cards[${index}].image`, file);
-          }}
-          onDeleteFile={() => setFieldValue(`cards[${index}].image`, null)}
-          fileType="img"
-        />
-      </div>
-    </>
+      <FileUploader
+        onUpload={(file: any) => {
+          setFieldValue(`cards[${index}].image`, file);
+        }}
+        onDeleteFile={() => setFieldValue(`cards[${index}].image`, null)}
+        fileType="img"
+      />
+      <div className="modalSectionSeperator" />
+    </div>
   );
 };

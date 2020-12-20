@@ -13,5 +13,6 @@ export const formatUserInfo = (user: UserFieldsBEResponseType): UserFieldsType =
         resume: user.resume,
         describeYourSelf: user.describe_your_self,
         gpaScore: user.gpa_score,
+        displayImage: user.profile_image,
     }
 }

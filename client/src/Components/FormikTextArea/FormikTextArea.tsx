@@ -18,18 +18,9 @@ export const FormikTextAreaField = (props: InputFieldType) => {
   const [field, meta] = useField(name);
   const invalid = Boolean(meta.error && meta.touched);
   return (
-    <Tooltip
-      placement="right"
-      title={`${invalid ? meta.error : ""}`}
-      overlayClassName={[invalid ? "error-tooltip" : ""].join(" ")}
-      transitionName=""
-    >
+    <Tooltip placement="right" title={`${invalid ? meta.error : ""}`} overlayClassName={[invalid ? "error-tooltip" : ""].join(" ")} transitionName="">
       <div className="formikTextAreaField">
-        <TextArea
-          rows={rows}
-          {...field}
-          className={invalid ? `invalid ${props.className}` : props.className}
-        />
+        <TextArea rows={rows} {...field} className={invalid ? `invalid ${props.className}` : props.className} />
       </div>
     </Tooltip>
   );

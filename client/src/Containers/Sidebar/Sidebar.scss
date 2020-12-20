@@ -1,12 +1,40 @@
 @import "../../Assets//Scss/Constants.scss";
 
 .portfoliosSideBar {
-  width: 15%;
-  border: 1px solid $appColor;
+  width: 20%;
   padding: $appPadding;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  height: 100vh;
+}
+
+.userUpdateForm {
+  display: flex;
+  flex-direction: column;
+
+  input[type="file"] {
+    display: none;
+  }
+
+  .controls {
+    align-self: center;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: $appPadding;
+  }
+
+  .imgControl {
+    text-decoration-line: underline;
+    color: $appColor;
+    margin-left: 1rem;
+    cursor: pointer;
+  }
+  .custom-file-upload {
+    border: none;
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 .fileUploaderResume {

@@ -83,7 +83,8 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
         }}
         validationSchema={updateCardValidationSchema}
         onSubmit={(values: PortfolioCardType) => {
-          updatePortfolioCard({ data: values, dispatch: dispatcher });
+          const updateModalVisibility = () => setState({ modalVisibility: false });
+          updatePortfolioCard({ data: values, dispatch: dispatcher, updateModalVisibility });
         }}
       >
         {({ values, setFieldValue, resetForm, handleSubmit }: FormikProps<FormFieldsType>) => {
@@ -98,9 +99,9 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
               }}
               footer={[]}
             >
-              <FormikInputField name="name" placeHolder="Title" />
-              <FormikInputField name="description" placeHolder="Description" />
-              <FormikInputField name="url" placeHolder="Url" />
+              <FormikInputField name="name" placeHolder="Title" fieldLabel="Name" />
+              <FormikInputField name="description" placeHolder="Description" fieldLabel="Description" />
+              <FormikInputField name="url" placeHolder="Url" fieldLabel="External link" />
               <FileUploader
                 onUpload={(file: any) => {
                   setFieldValue("image", file);

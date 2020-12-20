@@ -10,6 +10,7 @@ type componentProps = {
   fileType?: "text" | "img";
   imgSrc?: string;
   resumeName?: string;
+  buttonText?: string;
 };
 
 export interface UploadedSignatureType {
@@ -22,7 +23,7 @@ export interface UploadedSignatureType {
 }
 
 export const FileUploader = (props: componentProps): JSX.Element => {
-  const { onUpload, onDeleteFile = () => {}, fileType = "text", imgSrc = "", resumeName = "" } = props;
+  const { onUpload, onDeleteFile = () => {}, fileType = "text", imgSrc = "", resumeName = "", buttonText = "Attach" } = props;
   const [file, setFile] = useState(imgSrc ? `http://localhost:3001${imgSrc}` : resumeName || "");
   const uploadFile = (uploadedFile: any): void => {
     if (uploadedFile && uploadedFile.type.includes("text/plain")) {
@@ -62,7 +63,7 @@ export const FileUploader = (props: componentProps): JSX.Element => {
             accept={`${fileType === "text" ? "text/plain, application/pdf" : "image/*"}`}
           />
           <span className="attach-text">
-            <span>Attach</span>
+            <span>{buttonText}</span>
           </span>
         </label>
         {fileType === "img" && file.length ? (

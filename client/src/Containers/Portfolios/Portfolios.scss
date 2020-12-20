@@ -2,10 +2,11 @@
 
 .portfoliosContainer {
   display: flex;
-  flex-direction: column;
 
   .portfoliosDetail {
     display: flex;
-    height: 75vh;
+    width: 100%;
+    flex-direction: column;
+    height: 100vh;
   }
 }

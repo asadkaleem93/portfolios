@@ -7,21 +7,21 @@
   }
   .signInForm {
     width: 50%;
+    overflow-y: scroll;
+    height: 100vh;
     padding: $appPadding;
     .sectionContainer {
       @include sectionContainer;
       .fieldRow {
         display: flex;
         justify-content: space-between;
-        .formikInputField {
-          width: 47%;
-        }
+        align-items: center;
         .radioGroup {
           display: flex;
           justify-content: flex-start;
           width: 47%;
           align-items: center;
-          margin-bottom: 0.8rem;
+          margin-top: 0.4rem;
           .label {
             margin-right: 1.2rem;
             font-weight: 600;
@@ -33,6 +33,7 @@
           height: 2rem;
           display: flex;
           align-items: center;
+          margin-top: 0.4rem;
         }
       }
     }

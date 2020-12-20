@@ -30,6 +30,7 @@ export type UserFieldsType = {
     describeYourSelf: string;
     resume: string;
     gender: string;
+    displayImage: string;
 };
 
 export type UserFieldsBEResponseType = {
@@ -45,4 +46,5 @@ export type UserFieldsBEResponseType = {
     gpa_score: string;
     skills: string[];
     interest: string[];
+    profile_image: string;
 };
