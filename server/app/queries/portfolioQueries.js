@@ -52,7 +52,7 @@ router.post("/setPortfolioCards", multipartMiddleware, (apiRequest, apiResponse)
                   ...card,
                 };
               } else {
-                const path = `/uploads/images/${userName}-${card.name}-${image.image.originalFilename}`;
+                const path = `/uploads/images/${userName}-${image.image.originalFilename}`;
                 const savingPath = `${__dirname}${path}`;
                 const newPath = `/attachements/getImage?q=${path}`;
                 updatedData = {
@@ -131,7 +131,7 @@ router.post("/updatePortfolioCard", multipartMiddleware, (apiRequest, apiRespons
         let updatedData;
         let query;
         if (image) {
-          const path = `/uploads/images/${userName}-${data.name}-${image.originalFilename}`;
+          const path = `/uploads/images/${userName}-${image.originalFilename}`;
           const savingPath = `${__dirname}${path}`;
           const newPath = `/attachements/getImage?q=${path}`;
 

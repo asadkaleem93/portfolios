@@ -32,10 +32,10 @@ export const PortfoliosContent = (props: { userName: string }) => {
       <div className="cards">
         {updatedCards.map((card: PortfolioCardType) =>
           card.url.length ? (
-            <a href={card.url} target="_blank">
-              <PortfolioCard card={card} dispatcher={dispatcher} />
-            </a>
+            // <a href={card.url} target="_blank">
+            <PortfolioCard card={card} dispatcher={dispatcher} />
           ) : (
+            // </a>
             <PortfolioCard card={card} dispatcher={dispatcher} />
           ),
         )}

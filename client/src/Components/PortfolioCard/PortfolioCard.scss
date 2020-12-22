@@ -1,0 +1,14 @@
+@import "../../Assets/Scss/Required.scss";
+
+.regularCard {
+  // background-color: "rgba(0,0,0,.5)";
+  // background-color: red;
+  &.cardHover {
+    // opacity: 0.7;
+    border-radius: 5;
+    z-index: 5;
+  }
+  // .hoverOverlay {
+  //   transition: all 0.3s;
+  // }
+}

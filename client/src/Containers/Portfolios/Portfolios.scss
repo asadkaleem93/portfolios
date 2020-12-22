@@ -2,11 +2,14 @@
 
 .portfoliosContainer {
   display: flex;
+  justify-content: flex-end;
 
   .portfoliosDetail {
     display: flex;
-    width: 100%;
     flex-direction: column;
+    width: 100%;
+    // width: calc(100% - 60px);
+    // justify-content: flex-end;
     height: 100vh;
   }
 }
