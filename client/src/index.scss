@@ -6,6 +6,14 @@
 
 .ant-modal-root {
   font-family: "Roboto", sans-serif;
+  .ant-modal {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    //   height: calc(100vh - 100px);
+    top: 0px;
+    bottom: 0px;
+    //   overflow-y: auto;
+  }
 }
 
 .modalSectionSeperator {

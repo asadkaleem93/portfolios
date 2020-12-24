@@ -4,9 +4,9 @@ import { ButtonProps } from "antd/es/button";
 
 import "./PrimaryButton.scss";
 
-type PrimaryButtonType = { label: string } & ButtonProps;
+type PrimaryButtonType = { label: string; mouseEnterCallback?: () => void } & ButtonProps;
 
 export const PrimaryButton = (props: PrimaryButtonType) => {
-  const { label } = props;
+  const { label, mouseEnterCallback = () => {} } = props;
   return <Button {...props}>{label}</Button>;
 };

@@ -1,9 +1,8 @@
 import * as React from "react";
 import Card from "antd/es/card";
 import Typography from "antd/es/typography";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Formik, FormikProps } from "formik";
-import { Modal } from "antd/es";
+import { Modal, Tooltip } from "antd/es";
 
 import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
 import { FormikInputField } from "../FormikInputField/FormikInputField";
@@ -14,7 +13,6 @@ import { EmailPasswordFields } from "../EmailPasswordFields/EmailPasswordFields"
 import { updateCardValidationSchema } from "./metaData";
 import "./PortfolioCard.scss";
 
-const { Meta } = Card;
 const { Paragraph } = Typography;
 
 type FormFieldsType = {
@@ -37,109 +35,56 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
   });
   const { modalVisibility } = state;
 
-  const CardTitle = (props: { name: string }) => {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <span>{props.name}</span>
-        <span>
-          <DeleteOutlined
-            onClick={(e: any) => {
-              e.preventDefault();
-              deletePortfolioCard({ data: { id, userName }, dispatch: dispatcher });
-            }}
-            translate
-          />
-          <EditOutlined
-            onClick={(e: any) => {
-              e.preventDefault();
-              setState({ ...state, modalVisibility: true });
-            }}
-            translate
-          />
-        </span>
-      </div>
-    );
-  };
+  const mouseHover = (boolValue: boolean) => setState({ ...state, hover: boolValue });
+
   const imgSrc = imgLink ? `http://localhost:3001${imgLink}` : `${process.env.PUBLIC_URL}/card-blank-slate.jpg`;
   return (
     <>
-      {/* {state.hover && ( */}
       <div
         className={`regularCard ${state.hover ? "cardHover" : ""}`}
         style={{
-          // width: "100%",
           borderRadius: 5,
           height: "250px",
-          // backgroundColor: "black",
           zIndex: 10,
           backgroundImage: `url(${imgSrc})`,
           backgroundSize: "100% 250px",
         }}
-        onMouseEnter={() => {
-          console.log("ENTER");
-          setState({ ...state, hover: true });
-        }}
-        // onMouseOut={() => {
-        //   console.log("OUT");
-        //   setState({ ...state, hover: false });
-        // }}
+        onMouseEnter={() => mouseHover(true)}
       >
-        {/* <img className={`regularImage ${state.hover ? "hoveredImage" : ""}`} alt="example" src={imgSrc} width="100%" height="250px" style={{}} /> */}
-        {/* {state.hover && ( */}
-          <div
-            className="hoverOverlay"
-            style={{ color: "white", height: "100%", backgroundColor: "rgba(0,0,0,.7)" }}
-            onMouseOut={() => {
-              console.log("OUT");
-              setState({ ...state, hover: false });
-            }}
-          >
-            <div className="hoverChild" style={{ padding: "1rem", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-              <div
-                onMouseEnter={() => {
-                  setState({ ...state, hover: true });
-                }}
-                style={{ height: "100%" }}
-              >
-                {description}
-                {/* <Paragraph ellipsis={{ rows: 5 }}>{description}</Paragraph> */}
-              </div>
-              <div
-                style={{ display: "flex", justifyContent: "space-between" }}
-                onMouseEnter={() => {
-                  setState({ ...state, hover: true });
-                }}
-              >
+        {state.hover && (
+          <div className="hoverOverlay" onMouseEnter={() => mouseHover(true)} onMouseLeave={() => mouseHover(false)}>
+            <div className="hoverChild">
+              <Tooltip placement="right" title={description}>
+                <Paragraph style={{ color: "white" }} ellipsis={{ rows: 7 }}>
+                  {description}
+                </Paragraph>
+              </Tooltip>
+              <div className="buttonsWrapper" onMouseEnter={() => mouseHover(true)}>
                 <PrimaryButton
                   label="Edit"
-                  onMouseEnter={() => {
-                    setState({ ...state, hover: true });
+                  onMouseEnter={() => mouseHover(true)}
+                  style={{ width: "100%", marginRight: "5px" }}
+                  mouseEnterCallback={() => setState({ ...state, hover: true })}
+                  onClick={(e: any) => {
+                    e.preventDefault();
+                    setState({ ...state, modalVisibility: true });
                   }}
-                  style={{width: "100%", marginRight: "5px"}}
                 />
                 <PrimaryButton
                   label="delete"
-                  onMouseEnter={() => {
-                    setState({ ...state, hover: true });
+                  onMouseEnter={() => mouseHover(true)}
+                  style={{ width: "100%", marginLeft: "5px" }}
+                  mouseEnterCallback={() => mouseHover(true)}
+                  onClick={(e: any) => {
+                    e.preventDefault();
+                    deletePortfolioCard({ data: { id, userName }, dispatch: dispatcher });
                   }}
-                  style={{width: "100%", marginLeft: "5px"}}
                 />
               </div>
             </div>
           </div>
-        // )}
+        )}
       </div>
-      {/* )} */}
-      {/* {!state.hover && (
-      )} */}
-      {/* <Card hoverable cover={<img alt="example" src={imgSrc} width="100%" height="150px" />} onMouseEnter={() => setState({ ...state, hover: true })}>
-        <Meta title={<CardTitle name={name} />} description={<Paragraph ellipsis={{ rows: 5 }}>{description}</Paragraph>} />
-      </Card> */}
       <Formik
         initialValues={{
           id,
@@ -163,7 +108,6 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
             <Modal
               title="Edit Card"
               visible={modalVisibility}
-              // onOk={() => setState({ ...state, modalVisibility: false })}
               onCancel={() => {
                 setState({ ...state, modalVisibility: !modalVisibility });
                 resetForm();
