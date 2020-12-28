@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { Description } from "../Description/Description";
 import { PortfoliosContent } from "../PortfoliosContent/PortfoliosContent";
@@ -13,10 +13,16 @@ export const Portfolios = () => {
   const { userName: navUserName = "" } = useParams<{ userName?: string }>();
   const { state, dispatcher } = useAppContext();
   const { appLoader, portfolioCards, userInfo } = state;
+  const history = useHistory();
+  const notFoundRedirect = () => {
+    history.push("/notfound");
+  };
+
   React.useEffect(() => {
     getCompleteUserInfo({
       userName: navUserName,
       dispatch: dispatcher,
+      notFoundRedirect: notFoundRedirect,
     });
   }, [navUserName]);
 

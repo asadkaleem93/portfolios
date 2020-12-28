@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Formik, FormikProps } from "formik";
 import { Modal } from "antd/es";
-import { MenuUnfoldOutlined } from "@ant-design/icons";
+import { MenuUnfoldOutlined, LinkedinOutlined, GithubOutlined } from "@ant-design/icons";
 
 import { Credential } from "../../Components/Credential/Credential";
 import { TagSection } from "../../Components/TagSection/TagSection";
@@ -36,6 +36,8 @@ type FormFieldsType = {
   newResume: any;
   newDisplayImage: any;
   displayImage: string;
+  linkedInLink: string;
+  githubLink: string;
 };
 
 const createInitalValues = (userInfo) => {
@@ -58,6 +60,8 @@ const createInitalValues = (userInfo) => {
     skills: userInfo.skills,
     interests: userInfo.interest,
     describeYourSelf: userInfo.describeYourSelf,
+    linkedInLink: userInfo.linkedIn,
+    githubLink: userInfo.github,
   };
 };
 
@@ -70,10 +74,9 @@ export const Sidebar = (props: { userName: string }) => {
   });
   const { modalVisibility } = state;
   const { userInfo } = appState;
-  const { phoneNumber, email, degree, university, gpaScore, skills, interest, displayImage = "" } = userInfo;
+  const { phoneNumber, email, degree, university, gpaScore, skills, interest, displayImage = "", linkedIn = "", github = "" } = userInfo;
   const formatedSkills = skills ? skills.split(",") : [];
   const formatedInterests = interest ? interest.split(",") : [];
-
   const ExpandDrawerMarkup = () => {
     return (
       <>
@@ -93,6 +96,18 @@ export const Sidebar = (props: { userName: string }) => {
           {gpaScore && <Credential label="GPA" value={gpaScore} />}
           {formatedSkills.length ? <Credential label="Skills" value={<TagSection tags={formatedSkills} />} /> : <></>}
           {formatedInterests.length ? <Credential label="Interest" value={<TagSection tags={formatedInterests} />} /> : <></>}
+          <div style={{ display: "flex", marginTop: ".5rem" }}>
+            {linkedIn && (
+              <a href={linkedIn} target="_blank">
+                <LinkedinOutlined translate style={{ color: "#0077b5", fontSize: 25, marginRight: ".75rem" }} />
+              </a>
+            )}
+            {github && (
+              <a href={github} target="_blank">
+                <GithubOutlined translate style={{ color: "black", fontSize: 25 }} />
+              </a>
+            )}
+          </div>
         </div>
         {modalVisibility && (
           <Formik
@@ -154,12 +169,22 @@ export const Sidebar = (props: { userName: string }) => {
                         </span>
                       )}
                     </div>
-                    <FormikInputField name="newPassword" placeHolder="Enter new Password" password fieldLabel="Password" />
-                    <FormikInputField name="confirmPassword" placeHolder="Re enter new password" password fieldLabel="Confirm password" />
-                    <FormikInputField name="phoneNumber" placeHolder="Phone number" fieldLabel="Phone number" />
-                    <FormikInputField name="degree" placeHolder="Enter Degree" fieldLabel="Degree" />
-                    <FormikInputField name="university" placeHolder="Enter University" fieldLabel="University" />
-                    <FormikInputField name="gpa" placeHolder="Enter Score" fieldLabel="Score" />
+                    <div className="fieldRow">
+                      <FormikInputField name="newPassword" placeHolder="Enter new Password" password fieldLabel="Password" fieldWrapperStyle={{ width: "47%" }} />
+                      <FormikInputField name="confirmPassword" placeHolder="Re enter new password" password fieldLabel="Confirm password" fieldWrapperStyle={{ width: "47%" }} />
+                    </div>
+                    <div className="fieldRow">
+                      <FormikInputField name="phoneNumber" placeHolder="Phone number" fieldLabel="Phone number" fieldWrapperStyle={{ width: "47%" }} />
+                      <FormikInputField name="degree" placeHolder="Enter Degree" fieldLabel="Degree" fieldWrapperStyle={{ width: "47%" }} />
+                    </div>
+                    <div className="fieldRow">
+                      <FormikInputField name="university" placeHolder="Enter University" fieldLabel="University" fieldWrapperStyle={{ width: "47%" }} />
+                      <FormikInputField name="gpa" placeHolder="Enter Score" fieldLabel="Score" fieldWrapperStyle={{ width: "47%" }} />
+                    </div>
+                    <div className="fieldRow">
+                      <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="linkedInLink" placeHolder="Enter Linkedin link" fieldLabel="Linked in" />
+                      <FormikInputField fieldWrapperStyle={{ width: "47%" }} name="githubLink" placeHolder="Enter Github link" fieldLabel="Github" />
+                    </div>
                     <FormikInputField name="skills" placeHolder="Enter coma separated skills" fieldLabel="Skills" />
                     <FormikInputField name="interests" placeHolder="Enter coma separated interests" fieldLabel="Interests" />
                     <FormikTextAreaField name="describeYourSelf" placeHolder="Describe Your Self" />

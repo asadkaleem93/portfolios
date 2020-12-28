@@ -1,14 +1,16 @@
 import Axios from "axios";
+
 import { PushNotification } from "../Components/UseNotifications/UseNotifications";
 import { apiUrl } from "./AppConstants";
 
-export const apiCall = (props: {
+export const ApiCall = (props: {
   apiType?: "get" | "post" | "delete" | "put";
   url: string;
   payload: any;
   headers?: any;
+  notFoundRedirect?: () => void
 }) => {
-  const {apiType = "post", url, payload, headers = {}} = props;
+  const {apiType = "post", url, payload, headers = {}, notFoundRedirect = () => {}} = props;
     return Axios({
         method: apiType,
         url: `${apiUrl}${url}`,
@@ -29,6 +31,7 @@ export const apiCall = (props: {
             message: err.response.data.error,
           });
         }
+        notFoundRedirect();
         }
       );
 }

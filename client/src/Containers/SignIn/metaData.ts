@@ -21,4 +21,6 @@ export const signInFormValidatioSchema = yup.object().shape({
   score: yup.string(),
   skills: yup.string(),
   interests: yup.string(),
+  linkedInLink: yup.string(),
+  githubLink: yup.string(),
 });

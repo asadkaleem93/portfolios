@@ -31,6 +31,8 @@ export type UserFieldsType = {
     resume: string;
     gender: string;
     displayImage: string;
+    linkedIn: string;
+    github: string;
 };
 
 export type UserFieldsBEResponseType = {
@@ -47,4 +49,6 @@ export type UserFieldsBEResponseType = {
     skills: string[];
     interest: string[];
     profile_image: string;
+    linked_in: string;
+    github: string;
 };
