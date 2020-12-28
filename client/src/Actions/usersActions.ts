@@ -1,4 +1,4 @@
-import { apiCall } from "../Utils/ApiCall";
+import { ApiCall } from "../Utils/ApiCall";
 import {SET_USER_INFO, UPDATE_LOADER, UPDATE_USER_INFO} from '../Components/Contexts/AppContext';
 import { formatUserInfo } from "../Transformers/UsersTransformers";
 import { jsonToFormData } from "../Utils/helpers";
@@ -6,7 +6,7 @@ import { formatPortfolios } from "../Transformers/PortfoliosTransformers";
 
 export const createUser =  (payload: any, dispatch: any) => {
   const formData = jsonToFormData(payload);
-    return apiCall({url: "user/setUser", payload: formData, 
+    return ApiCall({url: "user/setUser", payload: formData, 
       headers: {
         headers: {
           "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s"
@@ -50,7 +50,7 @@ export const updateUserInfo = (props: {
     type: UPDATE_LOADER,
     payload: true
   })
-  return apiCall({url: "user/updateUserInfoCard", payload: formData}).then((res) => {
+  return ApiCall({url: "user/updateUserInfoCard", payload: formData}).then((res) => {
     if(res) {
       const formatedUserInfo = formatUserInfo(res)
         dispatch({
@@ -72,11 +72,12 @@ export const updateUserInfo = (props: {
 export const getCompleteUserInfo = (props: {
   userName: string;
   dispatch: any;
+  notFoundRedirect: () => void
 }) => {
-  const {userName, dispatch} = props;
-  return apiCall({url: "user/getCompleteInfo", payload: {
+  const {userName, dispatch, notFoundRedirect} = props;
+  return ApiCall({url: "user/getCompleteInfo", payload: {
     user_name: userName,
-  }}).then((res: any) => {
+  }, notFoundRedirect: notFoundRedirect}).then((res: any) => {
 
     dispatch({
       type: UPDATE_LOADER,

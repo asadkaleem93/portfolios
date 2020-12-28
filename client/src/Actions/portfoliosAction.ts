@@ -1,6 +1,6 @@
 import { SET_PORTFOLIO_CARDS, DELETE_PORTFOLIO_CARD, UPDATE_PORTFOLIO_CARD, UPDATE_USER_INFO, UPDATE_LOADER } from "../Components/Contexts/AppContext";
 import { formatPortfolio, formatPortfolios } from "../Transformers/PortfoliosTransformers";
-import { apiCall } from "../Utils/ApiCall";
+import { ApiCall } from "../Utils/ApiCall";
 import { jsonToFormData } from "../Utils/helpers";
 import { PortfolioCardType } from "../Utils/Types";
 
@@ -10,7 +10,7 @@ export const setPortfolioCards = (props: {
   updateModalVisibility: () => void;
 }) => {
   const {data, dispatch, updateModalVisibility} = props;
-  return apiCall({url: "portfolios/setPortfolioCards", payload: data}).then((res) => {
+  return ApiCall({url: "portfolios/setPortfolioCards", payload: data}).then((res) => {
     dispatch({
       type: UPDATE_LOADER,
       payload: true
@@ -41,7 +41,7 @@ export const deletePortfolioCard = (props: {
     type: UPDATE_LOADER,
     payload: true
   })
-  return apiCall({url: "portfolios/deletePortfolioCard", payload: data, apiType: "delete"}).then((res) => {
+  return ApiCall({url: "portfolios/deletePortfolioCard", payload: data, apiType: "delete"}).then((res) => {
     if(res) {
         dispatch({
         type: DELETE_PORTFOLIO_CARD,
@@ -68,7 +68,7 @@ export const updatePortfolioCard = (props: {
     type: UPDATE_LOADER,
     payload: true
   })
-  return apiCall({url: "portfolios/updatePortfolioCard", payload: formData}).then((res) => {
+  return ApiCall({url: "portfolios/updatePortfolioCard", payload: formData}).then((res) => {
     if(res) {
       const formatedPortfolioCard = formatPortfolio(res)
         dispatch({
