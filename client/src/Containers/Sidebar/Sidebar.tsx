@@ -18,6 +18,8 @@ import { DisplayImage } from "../../Components/DisplayImage/DisplayImage";
 import "./Sidebar.scss";
 import { OverlayDrawer } from "../../Components/OverlayDrawer/OverlayDrawer";
 import { ApplicationDrawertoggleOutside, ApplicationDrawertoggleInside } from "../../Assets/SvgIcons";
+import { ImageCropper } from "../../Components/ImageCropper/ImageCropper";
+import { blobToBase64 } from "../../Utils/helpers";
 
 type FormFieldsType = {
   password: string;
@@ -38,6 +40,7 @@ type FormFieldsType = {
   displayImage: string;
   linkedInLink: string;
   githubLink: string;
+  cropValues: string;
 };
 
 const createInitalValues = (userInfo) => {
@@ -62,21 +65,28 @@ const createInitalValues = (userInfo) => {
     describeYourSelf: userInfo.describeYourSelf,
     linkedInLink: userInfo.linkedIn,
     githubLink: userInfo.github,
+    cropValues: userInfo.cropValues,
   };
 };
 
 export const Sidebar = (props: { userName: string }) => {
   const { userName } = props;
   const { state: appState, dispatcher } = useAppContext();
-  const [state, setState] = React.useState<{ modalVisibility: boolean; drawerVisibility: boolean }>({
+  const [state, setState] = React.useState<{ modalVisibility: boolean; drawerVisibility: boolean; cropperVisibility: boolean; imgSrc: string; cropValues: string }>({
     modalVisibility: false,
     drawerVisibility: false,
+    cropperVisibility: false,
+    cropValues: "",
+    imgSrc: "",
   });
   const { modalVisibility } = state;
   const { userInfo } = appState;
   const { phoneNumber, email, degree, university, gpaScore, skills, interest, displayImage = "", linkedIn = "", github = "" } = userInfo;
   const formatedSkills = skills ? skills.split(",") : [];
   const formatedInterests = interest ? interest.split(",") : [];
+  console.log("state -->", state);
+  const onCloseCropper = () => setState({ ...state, cropperVisibility: false });
+  const onCropComplete = (cropValues: string) => setState({ ...state, cropValues: cropValues });
   const ExpandDrawerMarkup = () => {
     return (
       <>
@@ -109,7 +119,8 @@ export const Sidebar = (props: { userName: string }) => {
             )}
           </div>
         </div>
-        {modalVisibility && (
+        {/* {modalVisibility && ( */}
+        <>
           <Formik
             initialValues={createInitalValues(userInfo)}
             validationSchema={updateUserDataFormValidatioSchema}
@@ -145,6 +156,9 @@ export const Sidebar = (props: { userName: string }) => {
                               fileReader.onload = async (event: any): Promise<any> => {
                                 if (file) {
                                   setFieldValue("displayImage", event.target.result);
+                                  blobToBase64(file).then((res: any) => {
+                                    setState({ ...state, imgSrc: res, cropperVisibility: true });
+                                  });
                                 }
                               };
                               setFieldValue("newDisplayImage", file);
@@ -215,7 +229,8 @@ export const Sidebar = (props: { userName: string }) => {
               );
             }}
           </Formik>
-        )}
+        </>
+        {/* )} */}
       </>
     );
   };
@@ -244,6 +259,7 @@ export const Sidebar = (props: { userName: string }) => {
         header={{ visibility: false, value: "" }}
         zIndex={1000}
       />
+      <ImageCropper onCropComplete={onCropComplete} imgsrc={state.imgSrc} cropperVisibility={state.cropperVisibility} onCloseCropper={onCloseCropper} />
     </>
   );
 };

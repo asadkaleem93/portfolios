@@ -23,8 +23,7 @@ export const PortfoliosContent = (props: { userName: string }) => {
     });
   };
 
-  // const updatedCards = portfolioCards.filter((card: PortfolioCardType) => card.name.includes(searchedString));
-  const updatedCards = [];
+  const updatedCards = portfolioCards.filter((card: PortfolioCardType) => card.name.includes(searchedString));
 
   return (
     <div className="portfoliosContent">

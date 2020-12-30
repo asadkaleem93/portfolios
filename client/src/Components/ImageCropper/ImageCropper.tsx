@@ -9,26 +9,22 @@ export const ImageCropper = (props: { cropperVisibility: boolean; onCloseCropper
     return (
       <>
         <Cropper
+          style={{
+            containerStyle: {
+              zIndex: 1010,
+            },
+          }}
           image={imgsrc}
           crop={crop}
           cropSize={{ width: 400, height: 400 }}
           onCropChange={setCrop}
-          onCropComplete={
-            (_, croppedAreaPixels) => onCropComplete(JSON.stringify(croppedAreaPixels))
-            // {
-            // const croppedImage = await getCroppedImg("./sign-in.jpg", croppedAreaPixels);
-            // blobToBase64(croppedImage).then((res) => {
-            //   //@ts-ignore
-            //   setImg(res);
-            // });
-            //   }
-          }
+          onCropComplete={(_, croppedAreaPixels) => onCropComplete(JSON.stringify(croppedAreaPixels))}
         />
         <CloseCircleOutlined
           translate
           style={{
             fontSize: 30,
-            zIndex: 1000,
+            zIndex: 1020,
             position: "absolute",
             color: "white",
             top: 10,

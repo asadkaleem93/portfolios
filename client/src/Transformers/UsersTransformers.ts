@@ -15,6 +15,7 @@ export const formatUserInfo = (user: UserFieldsBEResponseType): UserFieldsType =
         gpaScore: user.gpa_score,
         displayImage: user.profile_image,   
         linkedIn: user.linked_in,
-        github: user.github
+        github: user.github,
+        cropValues: user.user_image_config
     }
 }

@@ -33,6 +33,7 @@ export type UserFieldsType = {
     displayImage: string;
     linkedIn: string;
     github: string;
+    cropValues: string;
 };
 
 export type UserFieldsBEResponseType = {
@@ -51,4 +52,5 @@ export type UserFieldsBEResponseType = {
     profile_image: string;
     linked_in: string;
     github: string;
+    user_image_config: string;
 };

@@ -110,7 +110,7 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
                     updatedData = { ...updatedData, displayImage: path };
                   }
                   query =
-                    "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, resume, password, gender, describe_your_self, skills, interest, profile_image, linked_in, github) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${resume}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}, ${displayImage}, ${linkedInLink}, ${githubLink} ) returning ${email};";
+                    "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, resume, password, gender, describe_your_self, skills, interest, profile_image, linked_in, github, user_image_config) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${resume}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}, ${displayImage}, ${linkedInLink}, ${githubLink}, ${cropValues} ) returning ${email};";
                   dbConnection
                     .one(query, updatedData)
                     .then((res) => {
@@ -136,7 +136,7 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
                   updatedData = { ...updatedData, displayImage: path };
                 }
                 query =
-                  "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, password, gender, describe_your_self, skills, interest, profile_image, linked_in, github ) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}, ${displayImage}, ${linkedInLink}, ${githubLink}) returning ${email};";
+                  "INSERT INTO user_info (email, user_name, phone_number, degree, university, gpa_score, password, gender, describe_your_self, skills, interest, profile_image, linked_in, github, user_image_config ) VALUES (${email}, ${userName}, ${phoneNumber}, ${degree}, ${university}, ${gpa}, ${password}, ${gender}, ${describeYourSelf}, ${skills}, ${interests}, ${displayImage}, ${linkedInLink}, ${githubLink}, ${cropValues}) returning ${email};";
                 dbConnection
                   .one(query, updatedData)
                   .then((res) => {
@@ -200,8 +200,8 @@ router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse
           }
 
           query = updatedData.newPassword.length
-            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}, linked_in = ${linkedInLink}. github = ${githubLink}  WHERE user_name = ${userName} RETURNING *;"
-            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}. linked_in = ${linkedInLink}, github = ${githubLink}  WHERE user_name = ${userName} RETURNING *;";
+            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}, linked_in = ${linkedInLink}, github = ${githubLink}, user_image_config = ${cropValues}  WHERE user_name = ${userName} RETURNING *;"
+            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resume_link}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}. linked_in = ${linkedInLink}, github = ${githubLink} , user_image_config = ${cropValues} WHERE user_name = ${userName} RETURNING *;";
         } else {
           updatedData = {
             ...data,
@@ -214,8 +214,8 @@ router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse
             updatedData = { ...updatedData, displayImage: path };
           }
           query = updatedData.newPassword.length
-            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}, linked_in = ${linkedInLink}, github = ${githubLink}  WHERE user_name = ${userName} RETURNING *;"
-            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}, linked_in = ${linkedInLink}, github = ${githubLink}  WHERE user_name = ${userName} RETURNING *;";
+            ? "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, password = ${hashPassword}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}, linked_in = ${linkedInLink}, github = ${githubLink}, user_image_config = ${cropValues}  WHERE user_name = ${userName} RETURNING *;"
+            : "UPDATE user_info SET phone_number = ${phoneNumber}, degree = ${degree}, university = ${university}, resume = ${resumeLink}, gpa_score = ${gpa}, skills = ${skills}, interest = ${interests}, profile_image = ${displayImage}, describe_your_self = ${describeYourSelf}, linked_in = ${linkedInLink}, github = ${githubLink}, user_image_config = ${cropValues}  WHERE user_name = ${userName} RETURNING *;";
         }
 
         dbConnection
@@ -227,6 +227,7 @@ router.post("/updateUserInfoCard", multipartMiddleware, (apiRequest, apiResponse
             });
           })
           .catch((err) => {
+            console.log("ERR -->", err);
             apiResponse.send({
               error: err,
             });
