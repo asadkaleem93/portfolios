@@ -12,6 +12,7 @@ import { useAppContext } from "../../Components/Contexts/AppContext";
 import { setPortfolioCards } from "../../Actions/portfoliosAction";
 import { jsonToFormData } from "../../Utils/helpers";
 import { SearchBar } from "../../Components/SearchBar/SearchBar";
+import { UserInfoUpdate } from "./UserInfoUpdate";
 
 type PortfoliosContentHeaderType = {
   onCardSearch: (searchedString: string) => void;
@@ -27,18 +28,19 @@ type FormFieldsType = {
 
 export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
   const { onCardSearch, userName } = props;
-  const [state, setState] = React.useState<{ modalVisibility: boolean }>({
-    modalVisibility: false,
+  const [state, setState] = React.useState<{ cardModalVisibility: boolean }>({
+    cardModalVisibility: false,
   });
-  const { modalVisibility } = state;
+  const { cardModalVisibility } = state;
   const { dispatcher } = useAppContext();
   return (
     <>
-      <Button type="primary" style={{ marginRight: "15px" }} onClick={() => setState({ ...state, modalVisibility: true })}>
+      <UserInfoUpdate userName={userName} />
+      <Button type="primary" style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => setState({ ...state, cardModalVisibility: true })}>
         Add Cards
       </Button>
       <SearchBar placeHolder="Search you target" onCardSearch={onCardSearch} />
-      {modalVisibility && (
+      {cardModalVisibility && (
         <Formik
           initialValues={{
             cards: [{ name: "", description: "", url: "", image: null }],
@@ -46,7 +48,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
           }}
           validationSchema={addCardValidationSchema}
           onSubmit={(values: { cards: FormFieldsType[]; userInfo: { email: string; password: string } }) => {
-            const updateModalVisibility = () => setState({ modalVisibility: false });
+            const updateModalVisibility = () => setState({ cardModalVisibility: false });
             setPortfolioCards({
               data: jsonToFormData({ ...values, userInfo: { ...values.userInfo, user_name: userName } }),
               dispatch: dispatcher,
@@ -66,10 +68,10 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
             return (
               <Modal
                 title="Add Cards"
-                visible={modalVisibility}
-                // onOk={() => setState({ ...state, modalVisibility: false })}
+                visible={cardModalVisibility}
+                // onOk={() => setState({ ...state, cardModalVisibility: false })}
                 onCancel={() => {
-                  setState({ ...state, modalVisibility: !modalVisibility });
+                  setState({ ...state, cardModalVisibility: !cardModalVisibility });
                   resetForm();
                 }}
                 footer={[]}

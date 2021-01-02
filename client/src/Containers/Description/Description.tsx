@@ -12,13 +12,13 @@ export const Description = () => {
   const [componentState, setState] = React.useState<{ bannerVisibility: boolean }>({ bannerVisibility: false });
   const { bannerVisibility } = componentState;
   const bannerStyle = {
-    height: bannerVisibility ? "25%" : 0,
+    height: bannerVisibility ? "30%" : 0,
     padding: bannerVisibility ? "1rem 3rem" : 0,
   };
   return (
     <>
       {/* {bannerVisibility && ( */}
-      <div className="portfoliosDescription" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/banner.png)`, ...bannerStyle }}>
+      <div className="portfoliosDescription" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/absctractBanner.jpg)`, ...bannerStyle }}>
         {bannerVisibility && describeYourSelf}
       </div>
       {/* )} */}

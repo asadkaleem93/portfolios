@@ -7,7 +7,7 @@ export const EmailPasswordFields = (props: { email?: string; password?: string }
   return (
     <div style={{ marginTop: "35px" }}>
       <FormikInputField name={email} placeHolder="Email" fieldLabel="Email" />
-      <FormikInputField name={password} placeHolder="password" fieldLabel="Password" password />
+      <FormikInputField name={password} placeHolder="Password" fieldLabel="Password" password />
     </div>
   );
 };

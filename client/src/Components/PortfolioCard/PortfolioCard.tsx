@@ -38,6 +38,46 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
   const mouseHover = (boolValue: boolean) => setState({ ...state, hover: boolValue });
 
   const imgSrc = imgLink ? `http://localhost:3001${imgLink}` : `${process.env.PUBLIC_URL}/card-blank-slate.jpg`;
+
+  const HoverContent = () => {
+    return (
+      <div className="hoverOverlay" onMouseEnter={() => mouseHover(true)} onMouseLeave={() => mouseHover(false)}>
+        <div className="hoverChild">
+          <div className="contentContainer">
+            <div className="title">{name}</div>
+            <Tooltip placement="right" title={description}>
+              <Paragraph style={{ color: "white" }} ellipsis={{ rows: 7 }}>
+                {description}
+              </Paragraph>
+            </Tooltip>
+          </div>
+          <div className="buttonsWrapper" onMouseEnter={() => mouseHover(true)}>
+            <PrimaryButton
+              label="Edit"
+              onMouseEnter={() => mouseHover(true)}
+              style={{ width: "100%", marginRight: "5px" }}
+              mouseEnterCallback={() => setState({ ...state, hover: true })}
+              onClick={(e: any) => {
+                e.preventDefault();
+                setState({ ...state, modalVisibility: true, hover: false });
+              }}
+            />
+            <PrimaryButton
+              label="delete"
+              onMouseEnter={() => mouseHover(true)}
+              style={{ width: "100%", marginLeft: "5px" }}
+              mouseEnterCallback={() => mouseHover(true)}
+              onClick={(e: any) => {
+                e.preventDefault();
+                deletePortfolioCard({ data: { id, userName }, dispatch: dispatcher });
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div
@@ -51,38 +91,16 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
         }}
         onMouseEnter={() => mouseHover(true)}
       >
-        {state.hover && (
-          <div className="hoverOverlay" onMouseEnter={() => mouseHover(true)} onMouseLeave={() => mouseHover(false)}>
-            <div className="hoverChild">
-              <Tooltip placement="right" title={description}>
-                <Paragraph style={{ color: "white" }} ellipsis={{ rows: 7 }}>
-                  {description}
-                </Paragraph>
-              </Tooltip>
-              <div className="buttonsWrapper" onMouseEnter={() => mouseHover(true)}>
-                <PrimaryButton
-                  label="Edit"
-                  onMouseEnter={() => mouseHover(true)}
-                  style={{ width: "100%", marginRight: "5px" }}
-                  mouseEnterCallback={() => setState({ ...state, hover: true })}
-                  onClick={(e: any) => {
-                    e.preventDefault();
-                    setState({ ...state, modalVisibility: true });
-                  }}
-                />
-                <PrimaryButton
-                  label="delete"
-                  onMouseEnter={() => mouseHover(true)}
-                  style={{ width: "100%", marginLeft: "5px" }}
-                  mouseEnterCallback={() => mouseHover(true)}
-                  onClick={(e: any) => {
-                    e.preventDefault();
-                    deletePortfolioCard({ data: { id, userName }, dispatch: dispatcher });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+        {state.hover ? (
+          url.length ? (
+            <a href={url} target="_blank">
+              <HoverContent />
+            </a>
+          ) : (
+            <HoverContent />
+          )
+        ) : (
+          <></>
         )}
       </div>
       <Formik

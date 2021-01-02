@@ -18,7 +18,6 @@ export const createUser =  (payload: any, dispatch: any) => {
         type: UPDATE_LOADER,
         payload: true
       })
-
       if(res) {
         const formatedUser = formatUserInfo(res);
         dispatch({
@@ -52,6 +51,7 @@ export const updateUserInfo = (props: {
   })
   return ApiCall({url: "user/updateUserInfoCard", payload: formData}).then((res) => {
     if(res) {
+      console.log('RES -->', res)
       const formatedUserInfo = formatUserInfo(res)
         dispatch({
         type: UPDATE_USER_INFO,

@@ -13,6 +13,26 @@
     top: 0px;
     bottom: 0px;
     //   overflow-y: auto;
+
+    // Update Image controls
+    .controls {
+      align-self: center;
+      display: flex;
+      justify-content: space-around;
+      width: 15rem;
+      margin-bottom: $appPadding;
+      .imgControl {
+        text-decoration-line: underline;
+        color: $appColor;
+        // margin-left: 1rem;
+        cursor: pointer;
+      }
+      .custom-file-upload {
+        border: none;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
   }
 }
 

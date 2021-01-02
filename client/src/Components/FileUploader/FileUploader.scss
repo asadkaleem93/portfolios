@@ -27,4 +27,16 @@
       }
     }
   }
+  .buttons-wrapper {
+    display: flex;
+    align-items: center;
+    .imgWrapper {
+      display: flex;
+      margin-right: 0.2rem;
+      .controlWrapper {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
 }

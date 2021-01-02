@@ -10,6 +10,7 @@ type componentProps = {
   fileType?: "text" | "img";
   imgSrc?: string;
   resumeName?: string;
+  imageName?: string;
   buttonText?: string;
 };
 
@@ -23,17 +24,18 @@ export interface UploadedSignatureType {
 }
 
 export const FileUploader = (props: componentProps): JSX.Element => {
-  const { onUpload, onDeleteFile = () => {}, fileType = "text", imgSrc = "", resumeName = "", buttonText = "Attach" } = props;
+  const { onUpload, onDeleteFile = () => {}, fileType = "text", imgSrc = "", resumeName = "", buttonText = "Attach", imageName = "" } = props;
   const [file, setFile] = useState(imgSrc ? `http://localhost:3001${imgSrc}` : resumeName || "");
+  const [fileName, setFilename] = useState(imageName || "");
   const uploadFile = (uploadedFile: any): void => {
     if (uploadedFile && uploadedFile.type.includes("text/plain")) {
       setFile(uploadedFile.name);
       onUpload(uploadedFile);
     }
   };
-
   const uploadImg = (uploadedFile: any): void => {
     const fileReader = new FileReader();
+    setFilename(uploadedFile.name);
     if (uploadedFile && uploadedFile.type && uploadedFile.type.includes("image")) {
       fileReader.readAsDataURL(uploadedFile);
       fileReader.onload = async (event: any): Promise<any> => {
@@ -67,13 +69,28 @@ export const FileUploader = (props: componentProps): JSX.Element => {
           </span>
         </label>
         {fileType === "img" && file.length ? (
-          <span className="imgWrapper">
+          <div className="imgWrapper">
             <img width="40" height="40" src={file} />
-          </span>
+            <span className="controlWrapper">
+              <span>{fileName}</span>
+              <span>Delete</span>
+              <DeleteOutlined
+                translate
+                style={{
+                  marginLeft: "1rem",
+                }}
+                onClick={() => {
+                  setFile("");
+                  onDeleteFile();
+                }}
+              />
+            </span>
+          </div>
         ) : (
           <span>{file}</span>
         )}
-        {file.length ? (
+
+        {file.length && fileType === "text" ? (
           <DeleteOutlined
             translate
             style={{

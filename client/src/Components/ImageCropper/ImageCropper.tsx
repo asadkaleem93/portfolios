@@ -12,6 +12,7 @@ export const ImageCropper = (props: { cropperVisibility: boolean; onCloseCropper
           style={{
             containerStyle: {
               zIndex: 1010,
+              position: "absolute",
             },
           }}
           image={imgsrc}
@@ -20,10 +21,9 @@ export const ImageCropper = (props: { cropperVisibility: boolean; onCloseCropper
           onCropChange={setCrop}
           onCropComplete={(_, croppedAreaPixels) => onCropComplete(JSON.stringify(croppedAreaPixels))}
         />
-        <CloseCircleOutlined
-          translate
+        <h1
           style={{
-            fontSize: 30,
+            fontSize: 20,
             zIndex: 1020,
             position: "absolute",
             color: "white",
@@ -31,7 +31,9 @@ export const ImageCropper = (props: { cropperVisibility: boolean; onCloseCropper
             left: 10,
           }}
           onClick={onCloseCropper}
-        />
+        >
+          Save
+        </h1>
       </>
     );
   return null;

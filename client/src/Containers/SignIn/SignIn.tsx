@@ -89,7 +89,7 @@ export const SignIn = () => {
           });
         }}
       >
-        {({ setFieldValue, handleSubmit, values }: FormikProps<FormFieldsType>) => {
+        {({ setFieldValue, handleSubmit }: FormikProps<FormFieldsType>) => {
           return (
             <div className="signInForm">
               <div className="sectionContainer">
@@ -112,17 +112,19 @@ export const SignIn = () => {
                   </div>
                 </div>
                 <div className="fieldRow">
-                  <FileUploader
-                    onUpload={(file: any) => {
-                      setFieldValue(`displayImage`, file);
-                      blobToBase64(file).then((res: any) => {
-                        setState({ ...state, imgSrc: res, cropperVisibility: true });
-                      });
-                    }}
-                    onDeleteFile={() => setFieldValue(`displayImage`, null)}
-                    fileType="img"
-                    buttonText="Upload Profile Picture"
-                  />
+                  <div className="fileUploader">
+                    <FileUploader
+                      onUpload={(file: any) => {
+                        setFieldValue(`displayImage`, file);
+                        blobToBase64(file).then((res: any) => {
+                          setState({ ...state, imgSrc: res, cropperVisibility: true });
+                        });
+                      }}
+                      onDeleteFile={() => setFieldValue(`displayImage`, null)}
+                      fileType="img"
+                      buttonText="Upload Profile Picture"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="sectionContainer">
