@@ -73,17 +73,21 @@ export const FileUploader = (props: componentProps): JSX.Element => {
             <img width="40" height="40" src={file} />
             <span className="controlWrapper">
               <span>{fileName}</span>
-              <span>Delete</span>
-              <DeleteOutlined
-                translate
-                style={{
-                  marginLeft: "1rem",
-                }}
+              <span
+                className="deleteSection"
                 onClick={() => {
                   setFile("");
                   onDeleteFile();
                 }}
-              />
+              >
+                <span>Delete</span>
+                <DeleteOutlined
+                  translate
+                  style={{
+                    marginLeft: "1rem",
+                  }}
+                />
+              </span>
             </span>
           </div>
         ) : (

@@ -3,6 +3,7 @@ import Search from "antd/es/input/Search";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
 import { Formik, FormikProps, FieldArray } from "formik";
+import { useHistory } from "react-router-dom";
 
 import { AddCardModal } from "../../Components/AddCardModal/AddCardModal";
 import { PrimaryButton } from "../../Components/PrimaryButton/PrimaryButton";
@@ -33,12 +34,13 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
   });
   const { cardModalVisibility } = state;
   const { dispatcher } = useAppContext();
+  const history = useHistory();
   return (
     <>
+      <PrimaryButton style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => history.push("/")} label="Create you account" />
       <UserInfoUpdate userName={userName} />
-      <Button type="primary" style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => setState({ ...state, cardModalVisibility: true })}>
-        Add Cards
-      </Button>
+      <PrimaryButton style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => setState({ ...state, cardModalVisibility: true })} label="Add Cards" />
+
       <SearchBar placeHolder="Search you target" onCardSearch={onCardSearch} />
       {cardModalVisibility && (
         <Formik

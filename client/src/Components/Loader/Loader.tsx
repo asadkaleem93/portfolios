@@ -4,5 +4,9 @@ import Spin from "antd/es/spin";
 import "./Loader.scss";
 
 export const Loader = () => {
-  return <Spin size="large" />;
+  return (
+    <div className="loaderMask">
+      <Spin size="large" />
+    </div>
+  );
 };

@@ -32,10 +32,17 @@
     align-items: center;
     .imgWrapper {
       display: flex;
-      margin-right: 0.2rem;
+      align-items: center;
+      img {
+        margin-right: 0.2rem;
+      }
       .controlWrapper {
         display: flex;
         flex-direction: column;
+        .deleteSection {
+          color: #f20000;
+          cursor: pointer;
+        }
       }
     }
   }

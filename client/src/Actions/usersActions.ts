@@ -51,7 +51,6 @@ export const updateUserInfo = (props: {
   })
   return ApiCall({url: "user/updateUserInfoCard", payload: formData}).then((res) => {
     if(res) {
-      console.log('RES -->', res)
       const formatedUserInfo = formatUserInfo(res)
         dispatch({
         type: UPDATE_USER_INFO,
@@ -66,6 +65,7 @@ export const updateUserInfo = (props: {
       type: UPDATE_LOADER,
       payload: false
     })
+    return res
   })
 }
 

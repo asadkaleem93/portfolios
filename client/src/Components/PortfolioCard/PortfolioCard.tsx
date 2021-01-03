@@ -29,6 +29,8 @@ type FormFieldsType = {
 export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any }) => {
   const { card, dispatcher } = props;
   const { name, description, id, userName, imgLink, url } = card;
+  const imageArray = imgLink ? imgLink.split("/") : [""];
+  const imageName = imageArray[imageArray.length - 1];
   const [state, setState] = React.useState<{ modalVisibility: boolean; hover: boolean }>({
     modalVisibility: false,
     hover: false,
@@ -145,6 +147,7 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
                 }}
                 imgSrc={values.imgLink}
                 fileType="img"
+                imageName={imageName}
               />
               <EmailPasswordFields />
 

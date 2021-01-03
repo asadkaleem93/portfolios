@@ -36,6 +36,47 @@
   }
 }
 
+.ant-image-preview {
+  pointer-events: unset !important;
+}
+
+.ant-notification-notice {
+  padding: 1rem;
+
+  box-shadow: 0 3px 6px 0 rgba(255, 101, 99, 0.16);
+
+  -webkit-box-shadow: 0 3px 6px 0 rgba(255, 101, 99, 0.16);
+  .ant-notification-notice-message,
+  .ant-notification-notice-description,
+  .ant-notification-notice-close {
+    color: inherit;
+
+    margin-bottom: 0;
+    margin-left: 3rem;
+    margin: 0 0 0 3rem;
+  }
+  .ant-notification-notice-icon {
+    font-size: "1.3rem";
+  }
+  &.success {
+    background: #deefd7;
+    color: #59ae3a;
+  }
+  &.error {
+    background: #fff7f7;
+    color: #ff6563;
+    box-shadow: none;
+  }
+  &.warning {
+    background: #ffcc99;
+    color: #ff8800;
+  }
+  &.info {
+    background: #ffffff;
+    color: #000000;
+  }
+}
+
 .modalSectionSeperator {
   border-top: 1px solid $appColor;
   margin-top: 1rem;

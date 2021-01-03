@@ -38,7 +38,7 @@ export const Sidebar = (props: { userName: string }) => {
     return (
       <>
         <div className="portfoliosSideBar">
-          <DisplayImage imgSrc={state.imgSrc} />
+          <DisplayImage imgSrc={state.imgSrc} actualImage={displayImage} />
           {userInfo.resume && userInfo.resume.length && (
             <a className="downloadAnchor" href={`http://localhost:3001${userInfo.resume}`} download>
               <PrimaryButton onClick={() => {}} label="Download Resume" style={{ width: "100%" }} />
@@ -77,7 +77,7 @@ export const Sidebar = (props: { userName: string }) => {
 
   return (
     <>
-      <div className="drawerHandle" onClick={() => setState({ ...state, drawerVisibility: !state.drawerVisibility })} style={{ left: `${state.drawerVisibility ? "256px" : "0px"}`, transition: "all 0.3s", zIndex: 1009, position: "fixed" }}>
+      <div className="drawerHandle" onClick={() => setState({ ...state, drawerVisibility: !state.drawerVisibility })} style={{ left: `${state.drawerVisibility ? "256px" : "0px"}`, transition: "all 0.3s", zIndex: 1000, position: "absolute" }}>
         {state.drawerVisibility ? <ApplicationDrawertoggleInside /> : <ApplicationDrawertoggleOutside />}
       </div>
       <OverlayDrawer

@@ -1,8 +1,18 @@
-.ant-spin {
+.loaderMask {
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
-  height: 100vh;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  z-index: 1001;
+  height: 100%;
+  position: absolute;
+  z-index: 1059;
+  .ant-spin {
+    width: 100%;
+    height: 100vh;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    z-index: 1060;
+    .ant-spin-dot {
+      z-index: 1100;
+    }
+  }
 }

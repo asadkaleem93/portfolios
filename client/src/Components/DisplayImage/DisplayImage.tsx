@@ -1,15 +1,56 @@
 import * as React from "react";
-import { Image } from "antd/es";
 
 import "./DisplayImage.scss";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
-export const DisplayImage = (props: { imgSrc?: string }) => {
-  const { imgSrc } = props;
-  return imgSrc ? (
-    <div className="imageWrapper">
-      <Image width={120} height={120} style={{ borderRadius: "50%" }} src={imgSrc} />
-    </div>
-  ) : (
-    <img className="emptyImage" src={`${process.env.PUBLIC_URL}/empty-profile-picture.png`} width={120} height={120} style={{ borderRadius: "46.5%" }} />
-  );
+export const DisplayImage = (props: { imgSrc?: string; actualImage?: string }) => {
+  const { imgSrc = "", actualImage = "" } = props;
+  const [state, setState] = React.useState<{ fullImageVisibility: boolean }>({
+    fullImageVisibility: false,
+  });
+  if (imgSrc)
+    return (
+      <>
+        {!state.fullImageVisibility ? (
+          <div className="imageWrapper">
+            <img width={120} height={120} style={{ borderRadius: "50%" }} src={imgSrc} onClick={() => setState({ ...state, fullImageVisibility: true })} />
+          </div>
+        ) : (
+          <>
+            <div className="imageWrapper">
+              <img width={120} height={120} style={{ borderRadius: "50%" }} src={imgSrc} onClick={() => setState({ ...state, fullImageVisibility: true })} />
+            </div>
+            <div className="ant-image-preview-root">
+              <div className="ant-image-preview-wrap" role="dialog" style={{ backgroundColor: "rgba(0,0,0, 0.5)", width: "100%", height: "100%" }}>
+                <div className="ant-image-preview">
+                  <div className="ant-image-preview-content">
+                    <CloseCircleOutlined
+                      translate
+                      style={{
+                        right: ".5rem",
+                        top: ".5rem",
+                        position: "absolute",
+                        fontSize: 30,
+                        color: "white",
+                        zIndex: 1081,
+                      }}
+                      onClick={() => {
+                        setState({ ...state, fullImageVisibility: false });
+                      }}
+                    />
+                    <div className="ant-image-preview-body">
+                      <div className="ant-image-preview-img-wrapper" style={{ transform: "translate3d(0px, 0px, 0px)," }}>
+                        <img className="ant-image-preview-img" src={actualImage} style={{ transform: "scale3d(1, 1, 1) rotate(0deg)" }} />
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </>
+    );
+  return <img className="emptyImage" src={`${process.env.PUBLIC_URL}/empty-profile-picture.png`} width={120} height={120} style={{ borderRadius: "46.5%" }} />;
 };
