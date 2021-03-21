@@ -26,7 +26,6 @@ export const Portfolios = () => {
     });
   }, [navUserName]);
 
-  // if (appLoader) return <Loader />;
   if (Object.keys(userInfo).length === 0 && portfolioCards.length === 0) return null;
 
   return (

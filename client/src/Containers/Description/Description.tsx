@@ -4,6 +4,7 @@ import { VerticalAlignBottomOutlined, VerticalAlignTopOutlined } from "@ant-desi
 import { useAppContext } from "../../Components/Contexts/AppContext";
 
 import "./Description.scss";
+import { ApplicationBannerDragDown, ApplicationBannerDragUp } from "../../Assets/SvgIcons";
 
 export const Description = () => {
   const { state } = useAppContext();
@@ -17,30 +18,18 @@ export const Description = () => {
   };
   return (
     <>
-      {/* {bannerVisibility && ( */}
       <div className="portfoliosDescription" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/absctractBanner.jpg)`, ...bannerStyle }}>
         {bannerVisibility && describeYourSelf}
       </div>
-      {/* )} */}
-      <div className="descriptionDrawerWrapper">
-        {!bannerVisibility ? (
-          <VerticalAlignBottomOutlined
-            style={{
-              fontSize: "30px",
-            }}
-            translate
-            onClick={() => setState({ ...componentState, bannerVisibility: !bannerVisibility })}
-          />
-        ) : (
-          <VerticalAlignTopOutlined
-            style={{
-              fontSize: "30px",
-            }}
-            translate
-            onClick={() => setState({ ...componentState, bannerVisibility: !bannerVisibility })}
-          />
-        )}
-      </div>
+      {!bannerVisibility ? (
+        <div className="descriptionDrawerWrapper" onClick={() => setState({ ...state, bannerVisibility: true })}>
+          <ApplicationBannerDragDown />
+        </div>
+      ) : (
+        <div className="descriptionDrawerWrapper" onClick={() => setState({ ...state, bannerVisibility: false })}>
+          <ApplicationBannerDragUp />
+        </div>
+      )}
     </>
   );
 };

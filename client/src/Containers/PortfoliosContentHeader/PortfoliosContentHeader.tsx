@@ -84,7 +84,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                     return (
                       <>
                         {values.cards.map((card, index) => (
-                          <AddCardModal setFieldValue={setFieldValue} index={index} />
+                          <AddCardModal setFieldValue={setFieldValue} index={index} arrayHelpers={arrayHelpers} />
                         ))}
                         <PrimaryButton
                           onClick={() =>
