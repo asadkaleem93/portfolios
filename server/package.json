@@ -4,7 +4,8 @@
   "description": "portfolios backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app/server.js"
   },
   "keywords": [],
   "author": "Asad Kaleem",
@@ -24,5 +25,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
+  },
+  "resolutions": { "fs-capacitor": "3.0.0" },
+  "engines": {
+    "node": "12.17.0"
   }
 }

@@ -1,7 +1,7 @@
 // lib
 const express = require("express");
 const router = express.Router();
-const dbConnection = require("./connection.js");
+// const dbConnection = require("./connection.js");
 const multipart = require("connect-multiparty");
 const fs = require("fs");
 const bcrypt = require("bcrypt");

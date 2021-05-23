@@ -1,6 +1,7 @@
 // lib
 const express = require("express");
 const router = express.Router();
+const pgp = require("pg-promise")({});
 const dbConnection = require("../connection.js");
 const multipart = require("connect-multiparty");
 const fs = require("fs");
@@ -77,6 +78,7 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
   const { resume, displayImage } = fileData;
   const { userName } = apiRequest.body.data;
   let query;
+
   const requiredFields = helpers.findEmptyValues(updatedData, ["email", "password", "phoneNumber", "describeYourSelf", "userName"]);
   if (requiredFields.length) {
     apiResponse.send({
