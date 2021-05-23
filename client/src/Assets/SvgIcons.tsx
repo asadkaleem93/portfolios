@@ -376,6 +376,62 @@ export const ApplicationDrawertoggleInside = (props: { width?: string; height?: 
   );
 };
 
+export const ApplicationBannerDragDown = (props: { width?: string; height?: string }): JSX.Element => {
+  return (
+    <svg width="80" height="23" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <title>background</title>
+        <rect x="-1" y="-1" width="221" height="77" id="canvas_background" fill="none" />
+      </g>
+
+      <g>
+        <title>Layer 1</title>
+        <g stroke="null" id="svg_1">
+          <path
+            stroke="null"
+            d="m64.67929,0.004c-10.83712,2.20961 -15.13375,8.83782 -15.13375,8.83782c-6.27373,7.54983 -17.5204,22.60564 -32.11652,0a27.92558,29.07902 0 0 0 -17.42854,-8.83782c-0.13544,0.13766 65.07481,0.1533 64.6788,0l0.00001,0z"
+            fill="#11649b"
+            id="svg_2"
+          />
+          <path
+            stroke="null"
+            d="m33.51467,12.00799l-5.1652,-5.38375a0.97162,1.01176 0 0 0 -1.37852,0a0.98458,1.02524 0 0 0 0,1.44098l5.8524,6.09903a0.97427,1.01451 0 0 0 1.34584,0.03066l5.89333,-6.12602a0.97663,1.01697 0 1 0 -1.37882,-1.44098l-5.16903,5.38008l-0.00001,0z"
+            fill="#fff"
+            id="svg_3"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
+export const ApplicationBannerDragUp = (props: { width?: string; height?: string }): JSX.Element => {
+  return (
+    <svg width="80" height="23" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <rect fill="none" id="canvas_background" height="77" width="221" y="-1" x="-1" />
+      </g>
+      <g>
+        <title>Layer 1</title>
+        <g stroke="null" id="svg_1">
+          <path
+            stroke="null"
+            id="svg_2"
+            fill="#11649b"
+            d="m70.67912,0.004c-11.8424,2.42226 -16.5376,9.68838 -16.5376,9.68838c-6.8557,8.27643 -19.14565,24.78123 -35.09574,0a30.51605,31.87762 0 0 0 -19.04526,-9.68838c-0.148,0.15091 71.11135,0.16805 70.67861,0z"
+          />
+          <path
+            stroke="null"
+            id="svg_3"
+            fill="#fff"
+            d="m36.63194,9.62314l5.64434,5.90189a1.06175,1.10913 0 0 0 1.5064,0a1.07591,1.12391 0 0 0 0,-1.57966l-6.39529,-6.68601a1.06465,1.11215 0 0 0 -1.47069,-0.03361l-6.44001,6.71559a1.06722,1.11484 0 1 0 1.50672,1.57966l5.64852,-5.89786z"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
 export const DollarSnapshotIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" id="prefix__business" width="35" height="35" viewBox="0 0 35 35">

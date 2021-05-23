@@ -37,7 +37,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
   const history = useHistory();
   return (
     <>
-      <PrimaryButton style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => history.push("/")} label="Create you account" />
+      <PrimaryButton style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => history.push("/")} label="Create your account" />
       <UserInfoUpdate userName={userName} />
       <PrimaryButton style={{ marginLeft: "15px", marginRight: "15px" }} onClick={() => setState({ ...state, cardModalVisibility: true })} label="Add Cards" />
 
@@ -84,7 +84,7 @@ export const PortfoliosContentHeader = (props: PortfoliosContentHeaderType) => {
                     return (
                       <>
                         {values.cards.map((card, index) => (
-                          <AddCardModal setFieldValue={setFieldValue} index={index} />
+                          <AddCardModal setFieldValue={setFieldValue} index={index} arrayHelpers={arrayHelpers} />
                         ))}
                         <PrimaryButton
                           onClick={() =>

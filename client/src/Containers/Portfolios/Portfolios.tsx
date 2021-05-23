@@ -18,15 +18,14 @@ export const Portfolios = () => {
     history.push("/notfound");
   };
 
-  React.useEffect(() => {
-    getCompleteUserInfo({
-      userName: navUserName,
-      dispatch: dispatcher,
-      notFoundRedirect: notFoundRedirect,
-    });
-  }, [navUserName]);
+  // React.useEffect(() => {
+  //   getCompleteUserInfo({
+  //     userName: navUserName,
+  //     dispatch: dispatcher,
+  //     notFoundRedirect: notFoundRedirect,
+  //   });
+  // }, [navUserName]);
 
-  // if (appLoader) return <Loader />;
   if (Object.keys(userInfo).length === 0 && portfolioCards.length === 0) return null;
 
   return (

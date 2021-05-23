@@ -85,7 +85,6 @@ export const Sidebar = (props: { userName: string }) => {
         handleClose={() => setState({ ...state, drawerVisibility: !state.drawerVisibility })}
         expandDrawerContent={<ExpandDrawerMarkup />}
         collapsedDrawerContent={<CollapsedDrawerMarkup />}
-        collapsedDrawerWidth="60px"
         completeCollapse
         closeButton
         header={{ visibility: false, value: "" }}
