@@ -44,5 +44,8 @@
   "proxy": "http://localhost:3001",
   "devDependencies": {
     "@types/react-router-dom": "^5.1.6"
+  },
+  "engines": {
+    "node": "12.17.0"
   }
 }
