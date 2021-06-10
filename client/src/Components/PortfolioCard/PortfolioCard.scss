@@ -1,6 +1,7 @@
 @import "../../Assets/Scss/Required.scss";
 
 .regularCard {
+  border: 1px solid 1px solid lightgrey;
   &.cardHover {
     border-radius: 5;
     z-index: 5;

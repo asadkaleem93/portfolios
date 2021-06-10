@@ -11,6 +11,12 @@ const multipartMiddleware = multipart();
 const helpers = require("../utils/helpers.js");
 
 const verifyUser = (user) => {
+  // const test = {
+  //   user_name: "asad",
+  // };
+  // const searchEmail = "DELETE from user_info WHERE user_name = ${user_name}";
+  // console.log("HERE");
+  // return dbConnection.manyOrNone(searchEmail, test).then((res) => console.log("RES", res));
   const searchEmail = "SELECT * FROM user_info WHERE email = ${email}";
   return dbConnection
     .one(searchEmail, user)
@@ -28,7 +34,7 @@ const uploadImg = (imgObj, userName) => {
   const fileName = imgObj.name || "";
   const path = `/uploads/profileImages/${userName}-${fileName}`;
   const savingPath = `${__dirname}${path}`;
-  const newPath = `/attachements/getProfileResume?q=${path}`;
+  const newPath = `/attachements/getImage?q=${path}`;
   fs.readFile(imgObj.path, function (err, data) {
     fs.writeFile(savingPath, data, function (err) {});
   });
@@ -87,9 +93,10 @@ router.post("/setUser", multipartMiddleware, async (apiRequest, apiResponse) => 
   } else {
     helpers.cryptPassword(apiRequest.body.data.password, (_, hash) => {
       updatedData = { ...apiRequest.body.data, resume: "", displayImage: "", password: hash };
+      console.log("updatedData -->", updatedData);
       if (resume) {
         const newPath = uploadResume(resume, userName);
-        updatedData = { ...apiRequest.body.data, resume: newPath };
+        updatedData = { ...updatedData, resume: newPath };
       }
       if (displayImage) {
         const path = uploadImg(displayImage, userName);

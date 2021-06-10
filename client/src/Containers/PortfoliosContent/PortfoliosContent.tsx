@@ -22,8 +22,10 @@ export const PortfoliosContent = (props: { userName: string }) => {
       searchedString: string,
     });
   };
-
-  const updatedCards = portfolioCards.filter((card: PortfolioCardType) => card.name.includes(searchedString));
+  const updatedCards = portfolioCards.filter((card: PortfolioCardType) => {
+    const nameToLower = card.name.toLowerCase();
+    return nameToLower.includes(searchedString.toLowerCase());
+  });
 
   return (
     <div className="portfoliosContent">
@@ -31,17 +33,7 @@ export const PortfoliosContent = (props: { userName: string }) => {
         <PortfoliosContentHeader onCardSearch={onCardSearch} userName={userName} />
       </div>
       {updatedCards.length ? (
-        <div className="cards">
-          {updatedCards.map((card: PortfolioCardType) =>
-            card.url.length ? (
-              // <a href={card.url} target="_blank">
-              <PortfolioCard card={card} dispatcher={dispatcher} />
-            ) : (
-              // </a>
-              <PortfolioCard card={card} dispatcher={dispatcher} />
-            ),
-          )}
-        </div>
+        <div className="cards">{updatedCards.map((card: PortfolioCardType) => (card.url.length ? <PortfolioCard card={card} dispatcher={dispatcher} /> : <PortfolioCard card={card} dispatcher={dispatcher} />))}</div>
       ) : (
         <NotFound label="Add cards in your portoflio" />
       )}

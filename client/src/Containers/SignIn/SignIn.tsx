@@ -152,6 +152,7 @@ export const SignIn = () => {
                     />
                   </div>
                 </div>
+                <span style={{ marginBottom: "3px" }}>Describe your self</span>
                 <FormikTextAreaField name="describeYourSelf" placeHolder="Describe Your Self" />
               </div>
               <PrimaryButton onClick={() => handleSubmit()} label="Submit Form" />

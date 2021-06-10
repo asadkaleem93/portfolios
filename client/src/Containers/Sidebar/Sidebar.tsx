@@ -11,6 +11,7 @@ import { getCroppedImg, blobToBase64 } from "../../Utils/helpers";
 
 import "./Sidebar.scss";
 import { PrimaryButton } from "../../Components/PrimaryButton/PrimaryButton";
+import { apiUrl } from "../../Utils/AppConstants";
 
 export const Sidebar = (props: { userName: string }) => {
   const { state: appState } = useAppContext();
@@ -22,10 +23,10 @@ export const Sidebar = (props: { userName: string }) => {
   const { phoneNumber, email, degree, university, gpaScore, skills, interest, resume = "", displayImage = "", linkedIn = "", github = "", cropValues = "" } = userInfo;
   const formatedSkills = skills ? skills.split(",") : [];
   const formatedInterests = interest ? interest.split(",") : [];
-
+  const BEUrl = apiUrl.substring(0, apiUrl.length - 1);
   React.useEffect(() => {
     const croppedImage = async () => {
-      const file = await getCroppedImg(`http://localhost:3001${displayImage}`, JSON.parse(cropValues));
+      const file = await getCroppedImg(`${BEUrl}${displayImage}`, JSON.parse(cropValues));
       blobToBase64(file).then((res: any) => {
         setState({ ...state, imgSrc: res });
       });
@@ -40,7 +41,7 @@ export const Sidebar = (props: { userName: string }) => {
         <div className="portfoliosSideBar">
           <DisplayImage imgSrc={state.imgSrc} actualImage={displayImage} />
           {userInfo.resume && userInfo.resume.length && (
-            <a className="downloadAnchor" href={`http://localhost:3001${userInfo.resume}`} download>
+            <a className="downloadAnchor" href={`${BEUrl}${userInfo.resume}`} download>
               <PrimaryButton onClick={() => {}} label="Download Resume" style={{ width: "100%" }} />
             </a>
           )}

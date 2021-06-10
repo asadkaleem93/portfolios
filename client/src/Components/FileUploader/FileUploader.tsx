@@ -25,10 +25,10 @@ export interface UploadedSignatureType {
 
 export const FileUploader = (props: componentProps): JSX.Element => {
   const { onUpload, onDeleteFile = () => {}, fileType = "text", imgSrc = "", resumeName = "", buttonText = "Attach", imageName = "" } = props;
-  const [file, setFile] = useState(imgSrc ? `http://localhost:3001${imgSrc}` : resumeName || "");
+  const [file, setFile] = useState(imgSrc ? `${apiUrl}${imgSrc}` : resumeName || "");
   const [fileName, setFilename] = useState(imageName || "");
   const uploadFile = (uploadedFile: any): void => {
-    if (uploadedFile && uploadedFile.type.includes("text/plain")) {
+    if (uploadedFile && (uploadedFile.type.includes("text/plain") || uploadedFile.type.includes("application/pdf"))) {
       setFile(uploadedFile.name);
       onUpload(uploadedFile);
     }

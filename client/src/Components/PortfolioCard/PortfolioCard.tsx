@@ -1,5 +1,4 @@
 import * as React from "react";
-import Card from "antd/es/card";
 import Typography from "antd/es/typography";
 import { Formik, FormikProps } from "formik";
 import { Modal, Tooltip } from "antd/es";
@@ -12,6 +11,7 @@ import { FileUploader } from "../FileUploader/FileUploader";
 import { EmailPasswordFields } from "../EmailPasswordFields/EmailPasswordFields";
 import { updateCardValidationSchema } from "./metaData";
 import "./PortfolioCard.scss";
+import { apiUrl } from "../../Utils/AppConstants";
 
 const { Paragraph } = Typography;
 
@@ -39,7 +39,12 @@ export const PortfolioCard = (props: { card: PortfolioCardType; dispatcher: any 
 
   const mouseHover = (boolValue: boolean) => setState({ ...state, hover: boolValue });
 
-  const imgSrc = imgLink ? `http://localhost:3001${imgLink}` : `${process.env.PUBLIC_URL}/card-blank-slate.jpg`;
+  const imgBEUrl = apiUrl.substring(0, apiUrl.length - 1);
+  // const imgSrc = imgLink ? `${imgBEUrl}${imgLink}` : `${process.env.PUBLIC_URL}/card-blank-slate.jpg`;
+  const staticImageArray = imageName.split("-");
+  const staticImageName = staticImageArray[staticImageArray.length - 1];
+  // const beImage = imageMapper[imageName];
+  const imgSrc = imgLink ? `${process.env.PUBLIC_URL}/${staticImageName}` : `${process.env.PUBLIC_URL}/card-blank-slate.jpg`;
 
   const HoverContent = () => {
     return (

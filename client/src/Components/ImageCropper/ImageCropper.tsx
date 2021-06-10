@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CloseCircleOutlined } from "@ant-design/icons";
 import Cropper from "react-easy-crop";
 
 export const ImageCropper = (props: { cropperVisibility: boolean; onCloseCropper: () => void; imgsrc: string; onCropComplete: (croppedAreaPixels) => void }) => {

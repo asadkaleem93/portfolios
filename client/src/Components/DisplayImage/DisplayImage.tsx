@@ -2,12 +2,15 @@ import * as React from "react";
 
 import "./DisplayImage.scss";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import { apiUrl } from "../../Utils/AppConstants";
 
 export const DisplayImage = (props: { imgSrc?: string; actualImage?: string }) => {
   const { imgSrc = "", actualImage = "" } = props;
   const [state, setState] = React.useState<{ fullImageVisibility: boolean }>({
     fullImageVisibility: false,
   });
+  const imgBEUrl = apiUrl.substring(0, apiUrl.length - 1);
+
   if (imgSrc)
     return (
       <>
@@ -40,7 +43,7 @@ export const DisplayImage = (props: { imgSrc?: string; actualImage?: string }) =
                     />
                     <div className="ant-image-preview-body">
                       <div className="ant-image-preview-img-wrapper" style={{ transform: "translate3d(0px, 0px, 0px)," }}>
-                        <img className="ant-image-preview-img" src={actualImage} style={{ transform: "scale3d(1, 1, 1) rotate(0deg)" }} />
+                        <img className="ant-image-preview-img" src={`${imgBEUrl}${actualImage}`} style={{ transform: "scale3d(1, 1, 1) rotate(0deg)" }} />
                       </div>
                     </div>
                   </div>

@@ -14,6 +14,7 @@ import { DisplayImage } from "../../Components/DisplayImage/DisplayImage";
 
 import { ImageCropper } from "../../Components/ImageCropper/ImageCropper";
 import { blobToBase64, getCroppedImg } from "../../Utils/helpers";
+import { apiUrl } from "../../Utils/AppConstants";
 
 type FormFieldsType = {
   password: string;
@@ -73,7 +74,7 @@ export const UserInfoUpdate = (props: { userName: string }) => {
   });
   React.useEffect(() => {
     const croppedImage = async () => {
-      const file = await getCroppedImg(`http://localhost:3001${userInfo.displayImage}`, JSON.parse(state.cropValues));
+      const file = await getCroppedImg(`${apiUrl}${userInfo.displayImage}`, JSON.parse(state.cropValues));
       blobToBase64(file).then((res: any) => {
         setState({ ...state, imgSrc: res });
       });
@@ -87,6 +88,7 @@ export const UserInfoUpdate = (props: { userName: string }) => {
 
   const onCloseCropper = () => setState({ ...state, cropperVisibility: false, modalVisibility: true });
   const onCropComplete = (cropValues: string) => setState({ ...state, cropValues: cropValues });
+  const BEUrl = apiUrl.substring(0, apiUrl.length - 1);
 
   return (
     <>
@@ -196,7 +198,7 @@ export const UserInfoUpdate = (props: { userName: string }) => {
                       resumeName={values.resumeName}
                     />
                     {userInfo.resume && userInfo.resume.length && (
-                      <a className="downloadAnchor" href={`http://localhost:3001${userInfo.resume}`} download>
+                      <a className="downloadAnchor" href={`${BEUrl}${userInfo.resume}`} download>
                         Download Resume
                       </a>
                     )}

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { VerticalAlignBottomOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
 
 import { useAppContext } from "../../Components/Contexts/AppContext";
 
